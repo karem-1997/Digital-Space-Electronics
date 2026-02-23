@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Space Electronics | Dubai</title>
+    <title>Digital Space Electronics | Dubai Official</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -12,105 +12,104 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        :root { 
-            --tech-blue: #0056b3; --tech-orange: #ff8c00; --gold: #ffb703; 
-            --whatsapp: #25d366; --dark-bg: #0a0a0c; --glass: rgba(255, 255, 255, 0.05);
-        }
+        :root { --blue: #0056b3; --orange: #ff8c00; --gold: #ffb703; --wa: #25d366; --bg: #0a0a0c; }
+        body { font-family: 'Poppins', 'Cairo', sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 50px; }
         
-        body { font-family: 'Poppins', 'Cairo', sans-serif; background: var(--dark-bg); color: white; margin: 0; padding-bottom: 50px; }
-
-        /* الهيدر الأساسي */
+        /* الهيدر */
         header { 
-            height: 25vh; margin: 10px; border-radius: 15px; 
-            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,86,179,0.4)), url('https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1470'); 
-            background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            height: 25vh; margin: 10px; border-radius: 15px; text-align: center;
+            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,86,179,0.4)), url('https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1470');
+            background-size: cover; display: flex; flex-direction: column; justify-content: center; border: 1px solid #222;
         }
-        .logo { font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700; margin: 0; }
-        .logo span { color: var(--tech-orange); }
-        .slogan { color: var(--gold); font-size: 0.8rem; margin-top: 5px; letter-spacing: 1px; }
+        header h1 span { color: var(--orange); }
+        .slogan { color: var(--gold); font-size: 0.8rem; letter-spacing: 1px; }
 
         .container { padding: 0 4%; }
-
+        
         /* شبكة المنتجات */
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        @media (min-width: 768px) { .menu-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } }
-
-        .card { background: var(--glass); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative; transition: 0.3s; }
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #000; cursor: pointer; }
-        .img-box img { width: 100%; height: 100%; object-fit: contain; }
-        .card-info { padding: 12px; }
-        .p-code { font-size: 0.7rem; color: var(--gold); display: block; }
-        .p-price { color: var(--gold); font-size: 1.1rem; font-weight: 700; margin: 5px 0; }
+        @media (min-width: 768px) { .menu-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
+        .card { background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--orange); }
+        .img-box img { width: 100%; aspect-ratio: 1/1; object-fit: contain; background: #000; cursor: pointer; }
+        .card-info { padding: 15px; }
+        .price-tag { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .old-p { text-decoration: line-through; color: #888; font-size: 0.8rem; }
+        .new-p { color: var(--gold); font-weight: 700; font-size: 1.2rem; }
 
         /* لوحة التحكم */
-        #adminDashboard { display: none; direction: rtl; background: #111; border: 2px solid var(--tech-blue); padding: 20px; border-radius: 20px; margin: 20px 0; }
-        .admin-sec { background: #1a1a1e; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        .admin-sec h4 { margin-top: 0; color: var(--tech-orange); border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .admin-sec input, .admin-sec textarea { width: 100%; padding: 10px; margin: 5px 0; background: #000; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
-        
-        .order-row { background: #000; border: 1px solid #333; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.8rem; }
+        #adminDashboard { display: none; direction: rtl; background: #111; border: 2px solid var(--blue); padding: 20px; border-radius: 20px; margin: 20px 0; }
+        .admin-sec { background: #1a1a1e; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
+        .admin-sec input, .admin-sec textarea { width: 100%; padding: 10px; margin: 5px 0; background: #000; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
+        .order-row { background: #000; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-right: 5px solid var(--orange); }
 
-        /* مودال الفاتورة الشيك للعميل */
-        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); overflow-y: auto; }
-        .modal-content { position: relative; background: #0f0f12; margin: 20px auto; padding: 20px; border: 1px solid var(--tech-blue); width: 90%; max-width: 450px; border-radius: 20px; }
+        /* المودال */
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); overflow-y: auto; }
+        .modal-content { background: #0f0f12; margin: 20px auto; padding: 20px; border: 1px solid var(--blue); width: 95%; max-width: 500px; border-radius: 20px; }
 
-        /* تصميم الفاتورة (Invoice) */
-        #invoiceDesign { background: white; color: black; padding: 25px; border-radius: 10px; text-align: left; font-family: 'Cairo'; position: relative; border-top: 8px solid #ff8c00; }
-        .inv-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
-        .inv-co { font-weight: bold; font-size: 1.1rem; }
-        .inv-info { font-size: 0.7rem; color: #555; line-height: 1.3; }
-        .inv-table { width: 100%; margin: 15px 0; border-collapse: collapse; }
-        .inv-table th { background: #f9f9f9; padding: 8px; font-size: 0.8rem; text-align: left; }
-        .inv-table td { padding: 10px 8px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        .inv-total { text-align: right; font-weight: bold; font-size: 1.2rem; color: #ff8c00; margin-top: 10px; }
+        /* الفاتورة الاحترافية */
+        #invoiceBox { background: white; color: black; padding: 30px; border-radius: 0; font-family: 'Cairo'; border-top: 12px solid #000; position: relative; }
+        .inv-logo-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .inv-co-info { font-size: 0.7rem; color: #333; line-height: 1.5; }
+        .inv-title { font-size: 1.8rem; font-weight: 900; color: var(--orange); }
+        .inv-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .inv-table th { background: #f0f0f0; text-align: left; padding: 10px; font-size: 0.8rem; border: 1px solid #ddd; }
+        .inv-table td { padding: 12px 10px; border: 1px solid #eee; font-size: 0.9rem; }
+        .inv-total-row { text-align: right; margin-top: 15px; font-size: 1.3rem; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; }
+        .inv-footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid #eee; font-size: 0.6rem; text-align: center; color: #777; }
 
-        .btn-order { background: var(--whatsapp); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; font-family: 'Cairo'; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-save { background: #444; color: white; border: none; padding: 8px; border-radius: 8px; width: 100%; margin-top: 10px; cursor: pointer; font-family: 'Cairo'; }
-
-        footer { text-align: center; padding: 30px; font-size: 0.8rem; color: #666; }
-        .dse-admin-btn { background: transparent; border: none; color: #111; cursor: pointer; font-size: 10px; letter-spacing: 2px; }
+        .btn { padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; width: 100%; font-family: 'Cairo'; margin-top: 10px; transition: 0.3s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-wa { background: var(--wa); color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-blue { background: var(--blue); color: white; }
+        .btn-adm-act { width: auto; padding: 5px 15px; font-size: 0.8rem; margin-left: 5px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-<header id="siteHeader">
-    <h1 class="logo" id="displayLogo">Digital Space <span>Electronics</span></h1>
-    <p class="slogan" id="displaySlogan">LAPTOPS • SPARE PARTS • ACCESSORIES</p>
+<header>
+    <h1 id="dTitle" class="logo">Digital Space <span>Electronics</span></h1>
+    <p class="slogan" id="dSlogan">LAPTOPS • SPARE PARTS • ACCESSORIES</p>
 </header>
 
 <div class="container">
     <div id="adminDashboard">
-        <h3 style="text-align:center;">إدارة المتجر الذكية</h3>
+        <h2 style="text-align:center; color:var(--orange);">DSE Management System</h2>
         
         <div class="admin-sec">
-            <h4>📥 الطلبات الجديدة</h4>
-            <div id="newOrders"></div>
+            <h4>📥 الطلبات الجديدة (قيد التنفيذ)</h4>
+            <div id="listNewOrders"></div>
         </div>
 
         <div class="admin-sec">
-            <h4>📁 الأرشيف</h4>
-            <div id="archivedOrders"></div>
+            <h4>📁 الأرشيف (طلبات مكتملة)</h4>
+            <div id="listDoneOrders"></div>
         </div>
 
         <div class="admin-sec">
-            <h4>⚙️ الإعدادات العامة</h4>
-            <input type="text" id="setT1" placeholder="الاسم الأول">
-            <input type="text" id="setT2" placeholder="الاسم الثاني">
-            <input type="text" id="setSl" placeholder="الوصف (السلوجن)">
-            <input type="text" id="setWA" placeholder="رقم الواتساب">
-            <button onclick="saveSets()" style="width:100%; padding:10px; background:var(--tech-blue); color:white; border:none; border-radius:5px; cursor:pointer;">حفظ الهوية</button>
+            <h4>⚙️ إعدادات المتجر</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <input type="text" id="inT1" placeholder="الاسم الأول">
+                <input type="text" id="inT2" placeholder="الاسم الثاني">
+            </div>
+            <input type="text" id="inSl" placeholder="الوصف">
+            <input type="text" id="inWa" placeholder="رقم واتساب الإدارة">
+            <button class="btn btn-blue" onclick="saveConfig()">حفظ الإعدادات</button>
         </div>
 
         <div class="admin-sec">
-            <h4>➕ إضافة منتج</h4>
-            <input type="text" id="pName" placeholder="اسم المنتج">
-            <input type="text" id="pCode" placeholder="رمز المنتج">
-            <input type="number" id="pPrice" placeholder="السعر">
-            <input type="file" id="pImg" onchange="encodeImg()">
-            <button onclick="uploadProduct()" style="width:100%; padding:10px; background:var(--tech-orange); color:white; border:none; border-radius:5px; cursor:pointer;">نشر الآن</button>
+            <h4>➕ إضافة / تعديل منتج</h4>
+            <input type="text" id="pN" placeholder="اسم المنتج">
+            <textarea id="pDesc" placeholder="وصف المنتج بالتفصيل"></textarea>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <input type="text" id="pC" placeholder="رمز المنتج (Code)">
+                <input type="number" id="pPriceOld" placeholder="السعر قبل الخصم">
+                <input type="number" id="pP" placeholder="السعر الحالي">
+            </div>
+            <input type="file" id="pI" onchange="readImg()">
+            <button class="btn" style="background:var(--orange); color:white;" onclick="addP()">نشر المنتج في المعرض</button>
         </div>
-        <button onclick="closeAdmin()" style="width:100%; padding:10px; background:#333; color:white; border:none; border-radius:5px;">خروج</button>
+        <button class="btn" style="background:#333; color:white;" onclick="closeAdm()">إغلاق اللوحة</button>
     </div>
 
     <div id="menuGrid" class="menu-grid"></div>
@@ -118,53 +117,65 @@
 
 <div id="orderModal" class="modal">
     <div class="modal-content">
-        <span onclick="closeModal()" style="position:absolute; top:10px; right:15px; color:white; cursor:pointer; font-size:24px;">&times;</span>
+        <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:28px; color:white;">&times;</span>
         
-        <div id="stepData">
-            <h3 id="targetPName" style="color:var(--tech-orange); text-align:center;"></h3>
+        <div id="formView">
+            <h3 id="popName" style="color:var(--orange); text-align:center; margin-top:30px;"></h3>
+            <p id="popDesc" style="font-size:0.8rem; text-align:center; color:#ccc;"></p>
             <div style="direction:rtl;">
-                <input type="text" id="cName" placeholder="الاسم (اختياري)" style="width:100%; padding:10px; margin:5px 0; border-radius:8px; border:1px solid #333; background:#000; color:white;">
-                <input type="text" id="cPhone" placeholder="رقم الجوال" style="width:100%; padding:10px; margin:5px 0; border-radius:8px; border:1px solid #333; background:#000; color:white;">
-                <input type="text" id="cAddr" placeholder="العنوان" style="width:100%; padding:10px; margin:5px 0; border-radius:8px; border:1px solid #333; background:#000; color:white;">
+                <input type="text" id="custN" placeholder="اسمك الكريم" class="btn" style="background:#000; color:white; border:1px solid #333; text-align:right;">
+                <input type="text" id="custP" placeholder="رقم الهاتف للتواصل" class="btn" style="background:#000; color:white; border:1px solid #333; text-align:right;">
+                <textarea id="custA" placeholder="عنوان التوصيل في الإمارات" class="btn" style="background:#000; color:white; border:1px solid #333; text-align:right; height:80px;"></textarea>
             </div>
-            <button class="btn-order" onclick="confirmOrder()" style="margin-top:10px;">إتمام الطلب واستخراج الفاتورة</button>
+            <button class="btn btn-blue" onclick="confirmOrder()">إتمام الطلب | عرض الفاتورة</button>
         </div>
 
-        <div id="stepInvoice" style="display:none;">
-            <div id="invoiceDesign">
-                <div class="inv-head">
-                    <div class="inv-co">Digital Space Electronics</div>
-                    <div style="color:var(--tech-orange); font-weight:bold;">INVOICE</div>
+        <div id="invoiceView" style="display:none;">
+            <div id="invoiceBox">
+                <div class="inv-logo-area">
+                    <div>
+                        <div class="inv-title">DSE</div>
+                        <div class="inv-co-info">
+                            Digital Space Electronics L.L.C<br>
+                            Shop 7, Obaid EL Helo Bldg, Bur-Dubai<br>
+                            Dubai, UAE | Mob: +971 50 4509223<br>
+                            <b>TRN: 1000177244400003</b>
+                        </div>
+                    </div>
+                    <div style="text-align:right">
+                        <h2 style="margin:0;">OFFICIAL INVOICE</h2>
+                        <p style="font-size:0.7rem;">Date: <span id="vDT"></span></p>
+                    </div>
                 </div>
-                <div class="inv-info">
-                    Shop 7 Obaid EL Helo Bldg, Bur-Dubai<br>
-                    Dubai, UAE | Mob: +971 50 4509223<br>
-                    <b>TRN: 1000177244400003</b>
-                </div>
-                <hr style="border:0.5px solid #eee; margin:10px 0;">
-                <div style="font-size:0.8rem;">
-                    <b>To:</b> <span id="invCustName"></span><br>
-                    <b>Date:</b> <span id="invDate"></span>
+                <div style="border:1px solid #eee; padding:10px; margin-bottom:15px; font-size:0.8rem;">
+                    <b>Customer Details:</b><br>
+                    Name: <span id="vCN"></span><br>
+                    Phone: <span id="vCP"></span><br>
+                    Address: <span id="vCA"></span>
                 </div>
                 <table class="inv-table">
-                    <thead><tr><th>Item</th><th>Code</th><th>Total</th></tr></thead>
-                    <tbody><tr><td id="invP"></td><td id="invC"></td><td id="invPr"></td></tr></tbody>
+                    <thead><tr><th>Description</th><th>Product Code</th><th>Total</th></tr></thead>
+                    <tbody><tr><td id="vIT"></td><td id="vCD"></td><td id="vPR"></td></tr></tbody>
                 </table>
-                <div class="inv-total">Total: <span id="invFinal"></span> AED</div>
-                <div style="font-size:0.6rem; margin-top:15px; text-align:center; color:#888;">Payment: Cash on Delivery</div>
+                <div class="inv-total-row">Total: <span id="vTOT"></span> AED</div>
+                <div class="inv-footer">
+                    Thank you for choosing Digital Space Electronics<br>
+                    Payment Mode: Cash on Delivery | Valid in UAE only
+                </div>
             </div>
-            <button class="btn-save" onclick="downloadInv()">حفظ الفاتورة كصورة 📥</button>
-            <button class="btn-order" onclick="sendWA()" style="margin-top:10px;"><i class="fab fa-whatsapp"></i> إرسال الطلب للواتساب</button>
+            <button class="btn" style="background:#222; color:white;" onclick="downloadInv()">تحميل الفاتورة كصورة (PNG)</button>
+            <button class="btn btn-wa" onclick="sendToWa()"><i class="fab fa-whatsapp"></i> تأكيد الطلب عبر واتساب</button>
         </div>
     </div>
 </div>
 
-<footer>
-    <p>Digital Space Electronics L.L.C | Dubai<br>TRN: 1000177244400003</p>
-    <button class="dse-admin-btn" onclick="openAdmin()">DSE</button>
+<footer style="text-align:center; padding:40px; font-size:0.8rem; color:#444;">
+    <p>Digital Space Electronics L.L.C | Dubai Official Store</p>
+    <button onclick="openAdm()" style="background:transparent; border:none; color:#111; cursor:pointer;">DSE ADMIN</button>
 </footer>
 
 <script>
+    // Firebase Setup
     const firebaseConfig = {
         apiKey: "AIzaSyDdqJApEM9mym9JdvwOS_Kl0mOwAt4o1qs",
         authDomain: "digital-space-electronics.firebaseapp.com",
@@ -176,118 +187,145 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    let imgData = "", globalWA = "971504509223", selectedItem = null;
+    let tempImg = "", currentWA = "971504509223", activeItem = null;
 
-    // وظائف الإدارة
-    function openAdmin() {
-        const p = prompt("Password:");
+    // Admin Functions
+    function openAdm() {
+        const p = prompt("Enter Admin Password:");
         db.ref('adminPass').once('value', s => {
-            if(p === (s.val() || "123")) { document.getElementById('adminDashboard').style.display = 'block'; loadAdminData(); }
+            if(p === (s.val() || "123")) { 
+                document.getElementById('adminDashboard').style.display = 'block'; 
+                syncOrders(); 
+                window.scrollTo(0,0);
+            }
         });
     }
-    function closeAdmin() { document.getElementById('adminDashboard').style.display = 'none'; }
-    function encodeImg() { const r = new FileReader(); r.onloadend = () => imgData = r.result; r.readAsDataURL(document.getElementById('pImg').files[0]); }
+    function closeAdm() { document.getElementById('adminDashboard').style.display = 'none'; }
+    function readImg() { const f = new FileReader(); f.onloadend = () => tempImg = f.result; f.readAsDataURL(document.getElementById('pI').files[0]); }
 
-    function saveSets() {
+    function saveConfig() {
         db.ref('settings').update({
-            t1: document.getElementById('setT1').value,
-            t2: document.getElementById('setT2').value,
-            sl: document.getElementById('setSl').value,
-            wa: document.getElementById('setWA').value
-        }).then(() => alert("Saved!"));
+            t1: document.getElementById('inT1').value, t2: document.getElementById('inT2').value,
+            sl: document.getElementById('inSl').value, wa: document.getElementById('inWa').value
+        }).then(() => alert("Settings Updated!"));
     }
 
-    function uploadProduct() {
-        const item = {
-            name: document.getElementById('pName').value,
-            code: document.getElementById('pCode').value,
-            price: document.getElementById('pPrice').value,
-            img: imgData
+    function addP() {
+        const pData = {
+            name: document.getElementById('pN').value,
+            desc: document.getElementById('pDesc').value,
+            code: document.getElementById('pC').value,
+            priceOld: document.getElementById('pPriceOld').value,
+            price: document.getElementById('pP').value,
+            img: tempImg
         };
-        db.ref('items').push(item).then(() => { alert("Published!"); location.reload(); });
+        db.ref('items').push(pData).then(() => { alert("Product Published!"); location.reload(); });
     }
 
-    // الطلبات والفاتورة
-    function openOrder(n, c, p) {
-        selectedItem = {n, c, p};
-        document.getElementById('targetPName').innerText = n;
-        document.getElementById('stepData').style.display = 'block';
-        document.getElementById('stepInvoice').style.display = 'none';
+    // Order & Invoice Core
+    function openBuy(n, c, p, d) {
+        activeItem = {n, c, p, d};
+        document.getElementById('popName').innerText = n;
+        document.getElementById('popDesc').innerText = d;
+        document.getElementById('formView').style.display = 'block';
+        document.getElementById('invoiceView').style.display = 'none';
         document.getElementById('orderModal').style.display = 'block';
     }
 
     function confirmOrder() {
-        const name = document.getElementById('cName').value || "Guest";
-        const phone = document.getElementById('cPhone').value;
-        const addr = document.getElementById('cAddr').value;
-        if(!phone || !addr) return alert("Please enter phone and address");
+        const name = document.getElementById('custN').value || "Valued Customer";
+        const phone = document.getElementById('custP').value;
+        const addr = document.getElementById('custA').value;
+        if(!phone || !addr) return alert("Please provide Phone and Address for delivery.");
 
-        const order = {
-            ...selectedItem, customer: name, phone, addr, status: 'new', date: new Date().toLocaleDateString()
+        const orderObj = { 
+            ...activeItem, customer: name, phone, addr, 
+            status: 'new', date: new Date().toLocaleString('en-GB') 
         };
+        
+        db.ref('orders').push(orderObj).then(() => {
+            showInvoice(orderObj);
+            document.getElementById('formView').style.display = 'none';
+            document.getElementById('invoiceView').style.display = 'block';
+        });
+    }
 
-        db.ref('orders').push(order).then(() => {
-            document.getElementById('invCustName').innerText = name;
-            document.getElementById('invDate').innerText = order.date;
-            document.getElementById('invP').innerText = selectedItem.n;
-            document.getElementById('invC').innerText = selectedItem.c;
-            document.getElementById('invPr').innerText = selectedItem.p;
-            document.getElementById('invFinal').innerText = selectedItem.p;
-            
-            document.getElementById('stepData').style.display = 'none';
-            document.getElementById('stepInvoice').style.display = 'block';
+    function showInvoice(o) {
+        document.getElementById('vCN').innerText = o.customer;
+        document.getElementById('vCP').innerText = o.phone;
+        document.getElementById('vCA').innerText = o.addr;
+        document.getElementById('vDT').innerText = o.date;
+        document.getElementById('vIT').innerText = o.n;
+        document.getElementById('vCD').innerText = o.code;
+        document.getElementById('vPR').innerText = o.p;
+        document.getElementById('vTOT').innerText = o.p;
+    }
+
+    function viewOrderInvoice(id) {
+        db.ref('orders/' + id).once('value', s => {
+            const o = s.val();
+            showInvoice(o);
+            document.getElementById('formView').style.display = 'none';
+            document.getElementById('invoiceView').style.display = 'block';
+            document.getElementById('orderModal').style.display = 'block';
         });
     }
 
     function downloadInv() {
-        html2canvas(document.querySelector("#invoiceDesign")).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'DSE-Invoice.png';
-            link.href = canvas.toDataURL();
-            link.click();
+        html2canvas(document.querySelector("#invoiceBox")).then(canvas => {
+            const a = document.createElement('a');
+            a.download = `DSE-Invoice-${document.getElementById('vCN').innerText}.png`;
+            a.href = canvas.toDataURL();
+            a.click();
         });
     }
 
-    function sendWA() {
-        const text = `*New Order DSE*%0AItem: ${selectedItem.n}%0APrice: ${selectedItem.p} AED%0ACustomer: ${document.getElementById('cName').value}%0AAddress: ${document.getElementById('cAddr').value}`;
-        window.open(`https://wa.me/${globalWA}?text=${text}`, '_blank');
+    function sendToWa() {
+        const msg = `*OFFICIAL ORDER - DSE*%0AItem: ${activeItem.n}%0ACode: ${activeItem.c}%0APrice: ${activeItem.p} AED%0A----------------%0ACustomer: ${document.getElementById('custN').value}%0APhone: ${document.getElementById('custP').value}%0AAddress: ${document.getElementById('custA').value}`;
+        window.open(`https://wa.me/${currentWA}?text=${msg}`, '_blank');
     }
 
-    function loadAdminData() {
+    function syncOrders() {
         db.ref('orders').on('value', s => {
             const os = s.val();
-            const nDiv = document.getElementById('newOrders');
-            const aDiv = document.getElementById('archivedOrders');
-            nDiv.innerHTML = ''; aDiv.innerHTML = '';
+            const nD = document.getElementById('listNewOrders');
+            const aD = document.getElementById('listDoneOrders');
+            nD.innerHTML = ''; aD.innerHTML = '';
             if(!os) return;
             Object.keys(os).forEach(id => {
                 const o = os[id];
                 const h = `<div class="order-row">
-                    <b>${o.n}</b> | ${o.customer} (${o.phone})<br>${o.addr}<br>
-                    <button onclick="db.ref('orders/${id}').update({status:'done'})" style="background:green; color:white; border:none; padding:3px; border-radius:4px; font-size:10px;">تم التنفيذ</button>
-                    <button onclick="db.ref('orders/${id}').remove()" style="background:red; color:white; border:none; padding:3px; border-radius:4px; font-size:10px;">حذف</button>
+                    <div style="float:left; font-size:0.7rem; color:#888;">${o.date}</div>
+                    <b>${o.n}</b> [${o.code}]<br>
+                    👤 ${o.customer} | 📞 ${o.phone}<br>
+                    <button class="btn btn-blue btn-adm-act" onclick="viewOrderInvoice('${id}')">عرض الفاتورة 📄</button>
+                    ${o.status=='new' ? `<button class="btn btn-adm-act" style="background:green; color:white;" onclick="db.ref('orders/${id}').update({status:'done'})">تم التنفيذ ✅</button>` : ''}
+                    <button class="btn btn-adm-act" style="background:red; color:white;" onclick="if(confirm('Delete?'))db.ref('orders/${id}').remove()">حذف 🗑️</button>
                 </div>`;
-                if(o.status === 'new') nDiv.innerHTML += h;
-                else aDiv.innerHTML += h;
+                if(o.status === 'new') nD.innerHTML += h;
+                else aD.innerHTML += h;
             });
         });
     }
 
-    // تشغيل العرض
+    // Display Logic
     db.ref('items').on('value', s => {
-        const items = s.val();
+        const its = s.val();
         const grid = document.getElementById('menuGrid');
         grid.innerHTML = '';
-        if(!items) return;
-        Object.keys(items).forEach(id => {
-            const i = items[id];
+        if(!its) return;
+        Object.keys(its).forEach(id => {
+            const i = its[id];
             grid.innerHTML += `<div class="card">
-                <div class="img-box" onclick="openOrder('${i.name}','${i.code}',${i.price})"><img src="${i.img}"></div>
+                <div class="img-box" onclick="openBuy('${i.name}','${i.code}',${i.price},'${i.desc||""}')"><img src="${i.img}"></div>
                 <div class="card-info">
-                    <span class="p-code">Code: ${i.code}</span>
-                    <h3 style="margin:5px 0; font-size:0.9rem;">${i.name}</h3>
-                    <div class="p-price">${i.price} AED</div>
-                    <button class="btn-order" onclick="openOrder('${i.name}','${i.code}',${i.price})" style="font-size:0.8rem; padding:8px;">اطلب الآن</button>
+                    <small style="color:var(--gold)">Code: ${i.code}</small>
+                    <h3 style="margin:5px 0; font-size:1rem; height:40px; overflow:hidden;">${i.name}</h3>
+                    <div class="price-tag">
+                        ${i.priceOld ? `<span class="old-p">${i.priceOld} AED</span>` : ''}
+                        <span class="new-p">${i.price} AED</span>
+                    </div>
+                    <button class="btn btn-blue" onclick="openBuy('${i.name}','${i.code}',${i.price},'${i.desc||""}')">اطلب الآن | Buy Now</button>
                 </div>
             </div>`;
         });
@@ -296,9 +334,9 @@
     db.ref('settings').on('value', s => {
         const v = s.val();
         if(v) {
-            document.getElementById('displayLogo').innerHTML = `${v.t1} <span>${v.t2}</span>`;
-            document.getElementById('displaySlogan').innerText = v.sl;
-            globalWA = v.wa || globalWA;
+            document.getElementById('dTitle').innerHTML = `${v.t1} <span>${v.t2}</span>`;
+            document.getElementById('dSlogan').innerText = v.sl;
+            currentWA = v.wa || currentWA;
         }
     });
 
