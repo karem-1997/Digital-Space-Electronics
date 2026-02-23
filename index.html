@@ -39,7 +39,6 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; overflow-y: auto; padding: 10px; }
         .modal-content { background: #111; padding: 20px; border-radius: 20px; max-width: 600px; margin: 5px auto; border: 1px solid var(--orange); }
         
-        /* تصميم الفاتورة الصغير والاحترافي */
         #invoiceBox { 
             background: white; color: black; padding: 25px; direction: ltr; font-family: 'Cairo', sans-serif; 
             width: 140mm; margin: auto; box-sizing: border-box; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -99,7 +98,7 @@
     </div>
 
     <div class="admin-box"><h3>🚨 الطلبات الجديدة</h3><div id="listOrders"></div></div>
-    <div class="admin-box"><h3>✅ الأرشفة</h3><div id="listArchive"></div></div>
+    <div class="admin-box"><h3>✅ الأرشيف</h3><div id="listArchive"></div></div>
     <div class="admin-box"><h3>📦 إدارة المخزن</h3><div id="listProds"></div></div>
 </div>
 
@@ -134,10 +133,10 @@
                     </div>
                 </div>
                 
-                <div style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
-                    <small><b>CLIENT INFO:</b></small><br>
-                    <span id="v_name" style="font-weight:bold;"></span><br>
-                    <span id="v_phone"></span>
+                <div style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:12px; line-height:1.6;">
+                    <small style="color:#777; font-weight:bold; font-size:0.75rem;">CLIENT INFORMATION:</small><br>
+                    <div style="font-size:1rem; font-weight:800; text-transform:uppercase;">Name: <span id="v_name"></span></div>
+                    <div style="font-size:1rem; font-weight:800;">Phone: <span id="v_phone"></span></div>
                 </div>
 
                 <table class="inv-table">
@@ -156,8 +155,8 @@
                 </div>
             </div>
 
-            <button class="btn btn-blue" onclick="downloadInv()">تحفظ الفاتورة كصورة 📥</button>
-            <button class="btn" id="waFinalBtn" style="background:var(--wa); color:white;" onclick="sendWA()">إرسال واتساب للطلب 💬</button>
+            <button class="btn btn-blue" onclick="downloadInv()">تحميل كصورة 📥</button>
+            <button class="btn" id="waFinalBtn" style="background:var(--wa); color:white;" onclick="sendWA()">إرسال واتساب 💬</button>
         </div>
         <button class="btn" style="background:none; color:#999;" onclick="closeModal()">إغلاق</button>
     </div>
@@ -216,6 +215,7 @@
 
     function renderInvoice(o, isAdmin) {
         currentOrder = o; document.getElementById('v_serial').innerText = o.serial; document.getElementById('v_name').innerText = o.customer;
+        document.getElementById('v_phone').innerText = o.phone;
         document.getElementById('v_date').innerText = o.date; document.getElementById('v_item').innerText = o.name;
         document.getElementById('v_code').innerText = o.code || 'N/A'; document.getElementById('v_qty').innerText = o.qty;
         document.getElementById('v_unit').innerText = o.price; document.getElementById('v_row_total').innerText = (o.qty * o.price);
