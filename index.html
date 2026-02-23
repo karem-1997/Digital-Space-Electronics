@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Space Electronics | Dubai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Cairo:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <style>
+        :root { 
+            --tech-blue: #0056b3; --tech-orange: #ff8c00; --gold: #ffb703; 
+            --whatsapp: #25d366; --dark-bg: #0a0a0c; --glass: rgba(255, 255, 255, 0.03);
+        }
+        
+        body { font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: white; margin: 0; padding-bottom: 50px; background-attachment: fixed; }
+
+        header { 
+            height: 22vh; margin: 10px; border-radius: 15px;
+            background: linear-gradient(45deg, rgba(0,0,0,0.9), rgba(0,86,179,0.4)), url('https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=1400'); 
+            background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+
+        .logo { font-size: clamp(1.2rem, 4vw, 2.2rem); font-weight: 700; color: white; margin: 0; }
+        .logo span { color: var(--tech-orange); }
+
+        .controls-container { padding: 0 3%; margin: -15px 0 20px 0; position: sticky; top: 10px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .search-wrapper { position: relative; width: 100%; max-width: 550px; }
+        .search-wrapper input {
+            width: 100%; padding: 12px 20px; border-radius: 30px; border: 1px solid var(--tech-blue);
+            background: rgba(15, 15, 20, 0.95); color: white; outline: none; backdrop-filter: blur(15px);
+        }
+        
+        .filter-tags { display: flex; gap: 8px; overflow-x: auto; width: 100%; max-width: 550px; padding: 5px; scrollbar-width: none; justify-content: center; }
+        .filter-tags::-webkit-scrollbar { display: none; }
+        .tag { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+        .tag.active { background: var(--tech-orange); border-color: var(--tech-orange); color: white; }
+
+        .container { padding: 0 3%; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (min-width: 768px) { .menu-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } }
+
+        .card { background: var(--glass); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; }
+        .img-box { width: 100%; aspect-ratio: 1/1; position: relative; background: #111; }
+        .img-box img { width: 100%; height: 100%; object-fit: contain; }
+        .category-tag { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.7); border: 1px solid var(--tech-orange); color: var(--tech-orange); padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; }
+
+        .card-info { padding: 12px; }
+        .card-info h3 { margin: 0; font-size: 0.9rem; height: 2.6em; overflow: hidden; }
+        .current-price { color: var(--gold); font-size: 1.1rem; font-weight: 700; display: block; margin-top: 5px; }
+
+        .order-btn { background: var(--whatsapp); color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; }
+
+        /* لوحة التحكم */
+        #adminDashboard { display: none; direction: rtl; background: #000; border: 2px solid var(--gold); padding: 20px; border-radius: 15px; margin-bottom: 30px; font-family: 'Cairo'; }
+        .form-section input, .form-section select { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; width: 100%; margin-bottom: 10px; }
+        .btn { padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; }
+
+        footer { text-align: center; padding: 30px; color: #555; font-size: 0.7rem; border-top: 1px solid #1a1a1a; margin-top: 40px; }
+        
+        /* زر DSE المخفي للتحكم */
+        .hidden-admin-btn {
+            background: transparent;
+            color: #1a1a1a; /* لون قريب جداً من لون الخلفية للتمويه */
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            padding: 15px;
+            transition: color 0.3s;
+        }
+        .hidden-admin-btn:active { color: var(--tech-orange); } /* يظهر لون عند الضغط فقط */
+
+        .social-float { position: fixed; bottom: 15px; right: 15px; display: flex; flex-direction: column; gap: 8px; z-index: 2000; }
+        .float-btn { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 1.2rem; background: #333; }
+    </style>
+</head>
+<body>
+
+<header id="siteHeader">
+    <h1 class="logo">Digital Space <span>Electronics</span></h1>
+    <p style="color:var(--gold); font-size: 0.8rem;">PREMIUM TECH SOLUTIONS</p>
+</header>
+
+<div class="controls-container">
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Search products..." onkeyup="runFilter()">
+    </div>
+    <div class="filter-tags" id="filterBar">
+        <div class="tag active" onclick="setCategory('All', this)">All</div>
+        <div class="tag" onclick="setCategory('Laptops', this)">Laptops</div>
+        <div class="tag" onclick="setCategory('Spare Parts', this)">Spare Parts</div>
+        <div class="tag" onclick="setCategory('Accessories', this)">Accessories</div>
+    </div>
+</div>
+
+<div class="container">
+    <div id="adminDashboard">
+        <h3 style="text-align:center; color:var(--gold);">لوحة التحكم الخاصة بـ DSE</h3>
+        
+        <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px; border: 1px solid #222;">
+            <label>تغيير كلمة المرور:</label>
+            <input type="password" id="newPass" placeholder="كلمة المرور الجديدة">
+            <button class="btn" style="background:var(--gold); color:black" onclick="updateSecurePass()">تحديث</button>
+        </div>
+
+        <div class="form-section">
+            <label>إضافة منتج:</label>
+            <button class="btn" style="background:#333; color:white" onclick="document.getElementById('imgUpload').click()">تحميل صورة</button>
+            <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="previewImg()">
+            <input type="text" id="pName" placeholder="اسم المنتج">
+            <input type="text" id="pSpec" placeholder="المواصفات">
+            <select id="pCat">
+                <option value="Laptops">Laptops</option>
+                <option value="Spare Parts">Spare Parts</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+            <input type="number" id="pPrice" placeholder="السعر (AED)">
+            <button class="btn" style="background:var(--tech-orange); color:white" onclick="addProduct()">نشر</button>
+        </div>
+        <button class="btn" style="background:#222; color:white" onclick="exitAdmin()">خروج</button>
+    </div>
+
+    <div id="menuGrid" class="menu-grid"></div>
+</div>
+
+<footer>
+    <p>Digital Space Electronics L.L.C | Dubai, UAE<br>Mobile: +971 50 4509223</p>
+    <button class="hidden-admin-btn" onclick="enterAdmin()">DSE</button>
+</footer>
+
+<div class="social-float">
+    <a href="#" id="waLink" class="float-btn" style="background:var(--whatsapp)"><i class="fab fa-whatsapp"></i></a>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDdqJApEM9mym9JdvwOS_Kl0mOwAt4o1qs",
+        authDomain: "digital-space-electronics.firebaseapp.com",
+        projectId: "digital-space-electronics",
+        databaseURL: "https://digital-space-electronics-default-rtdb.firebaseio.com",
+        storageBucket: "digital-space-electronics.firebasestorage.app",
+        messagingSenderId: "131126382715",
+        appId: "1:131126382715:web:38118e9b02952e655c92de"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    let currentImg = "", currentCat = "All", globalWA = "971504509223", isAuthorized = false;
+
+    function enterAdmin() {
+        const pass = prompt("DSE Admin Password:");
+        database.ref('adminPass').once('value', (snap) => {
+            const dbPass = snap.val() || "123";
+            if(pass === dbPass) {
+                isAuthorized = true;
+                document.getElementById('adminDashboard').style.display = 'block';
+                window.scrollTo(0,0);
+                renderMenu();
+            } else { alert("Unauthorized access."); }
+        });
+    }
+
+    function exitAdmin() {
+        isAuthorized = false;
+        document.getElementById('adminDashboard').style.display = 'none';
+        renderMenu();
+    }
+
+    function updateSecurePass() {
+        const newP = document.getElementById('newPass').value;
+        if(newP.length < 3) return alert("Too short.");
+        database.ref('adminPass').set(newP).then(() => {
+            alert("Updated.");
+            location.reload();
+        });
+    }
+
+    function setCategory(cat, el) {
+        document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        currentCat = cat;
+        runFilter();
+    }
+
+    function runFilter() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        renderMenu(search, currentCat);
+    }
+
+    function previewImg() {
+        const reader = new FileReader();
+        reader.onloadend = () => currentImg = reader.result;
+        reader.readAsDataURL(document.getElementById('imgUpload').files[0]);
+    }
+
+    function addProduct() {
+        if(!isAuthorized) return;
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const cat = document.getElementById('pCat').value;
+        const spec = document.getElementById('pSpec').value;
+        if(currentImg && name && price) {
+            database.ref('items').push({ name, price, cat, spec, img: currentImg }).then(() => {
+                alert("Success");
+                renderMenu();
+            });
+        }
+    }
+
+    function deleteItem(id) {
+        if(!isAuthorized) return;
+        if(confirm("Delete?")) database.ref('items/' + id).remove().then(() => renderMenu());
+    }
+
+    function renderMenu(search = "", cat = "All") {
+        database.ref('items').once('value', (snap) => {
+            const items = snap.val();
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = '';
+            if(!items) return;
+            Object.keys(items).forEach(id => {
+                const item = items[id];
+                const matchesSearch = item.name.toLowerCase().includes(search);
+                const matchesCat = (cat === "All" || item.cat === cat);
+                if(matchesSearch && matchesCat) {
+                    grid.innerHTML += `
+                        <div class="card">
+                            <div class="img-box">
+                                <span class="category-tag">${item.cat}</span>
+                                <img src="${item.img}">
+                            </div>
+                            <div class="card-info">
+                                <h3>${item.name}</h3>
+                                <span class="current-price">${item.price} AED</span>
+                                <a href="https://wa.me/${globalWA}?text=Order: ${item.name}" class="order-btn"><i class="fab fa-whatsapp"></i> Order Now</a>
+                                ${isAuthorized ? `<button onclick="deleteItem('${id}')" style="background:red; color:white; border:none; width:100%; margin-top:5px; padding:5px; border-radius:5px;">Delete</button>` : ''}
+                            </div>
+                        </div>`;
+                }
+            });
+        });
+    }
+
+    renderMenu();
+</script>
+</body>
+</html>
+
