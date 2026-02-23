@@ -13,85 +13,88 @@
     <style>
         :root { 
             --tech-blue: #0056b3; --tech-orange: #ff8c00; --gold: #ffb703; 
-            --whatsapp: #25d366; --dark-bg: #0a0a0c; --glass: rgba(255, 255, 255, 0.03);
+            --whatsapp: #25d366; --dark-bg: #0a0a0c; --glass: rgba(255, 255, 255, 0.05);
         }
         
-        body { font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: white; margin: 0; padding-bottom: 50px; background-attachment: fixed; }
+        body { 
+            font-family: 'Poppins', sans-serif; background: var(--dark-bg); color: white; margin: 0; 
+            padding-bottom: 50px; background-size: cover; background-attachment: fixed; transition: 0.5s;
+        }
 
         header { 
-            height: 22vh; margin: 10px; border-radius: 15px;
-            background: linear-gradient(45deg, rgba(0,0,0,0.9), rgba(0,86,179,0.4)), url('https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=1400'); 
+            height: 25vh; margin: 10px; border-radius: 15px;
+            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,86,179,0.4)), url('https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1470'); 
             background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1);
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
 
-        .logo { font-size: clamp(1.2rem, 4vw, 2.2rem); font-weight: 700; color: white; margin: 0; }
+        .logo { font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700; margin: 0; }
         .logo span { color: var(--tech-orange); }
+        .slogan { color: var(--gold); font-size: 0.9rem; margin-top: 5px; letter-spacing: 1px; }
 
-        .controls-container { padding: 0 3%; margin: -15px 0 20px 0; position: sticky; top: 10px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-        .search-wrapper { position: relative; width: 100%; max-width: 550px; }
-        .search-wrapper input {
-            width: 100%; padding: 12px 20px; border-radius: 30px; border: 1px solid var(--tech-blue);
-            background: rgba(15, 15, 20, 0.95); color: white; outline: none; backdrop-filter: blur(15px);
+        /* شريط البحث المنسق */
+        .search-area { padding: 0 5%; margin: -20px 0 20px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; position: sticky; top: 10px; z-index: 1000; }
+        .search-box { 
+            position: relative; width: 100%; max-width: 400px; 
+            background: rgba(15, 15, 20, 0.9); border-radius: 25px; border: 1px solid var(--tech-blue);
+            backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        
-        .filter-tags { display: flex; gap: 8px; overflow-x: auto; width: 100%; max-width: 550px; padding: 5px; scrollbar-width: none; justify-content: center; }
-        .filter-tags::-webkit-scrollbar { display: none; }
-        .tag { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; white-space: nowrap; transition: 0.3s; }
-        .tag.active { background: var(--tech-orange); border-color: var(--tech-orange); color: white; }
+        .search-box input { width: 100%; padding: 10px 40px 10px 20px; border: none; background: transparent; color: white; outline: none; box-sizing: border-box; }
+        .search-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--tech-orange); }
 
-        .container { padding: 0 3%; }
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        @media (min-width: 768px) { .menu-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } }
+        .filter-bar { display: flex; gap: 8px; overflow-x: auto; width: 100%; max-width: 500px; padding: 5px; scrollbar-width: none; justify-content: center; }
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .tag { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+        .tag.active { background: var(--tech-orange); border-color: var(--tech-orange); }
 
-        .card { background: var(--glass); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; }
-        .img-box { width: 100%; aspect-ratio: 1/1; position: relative; background: #111; }
+        .container { padding: 0 4%; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media (min-width: 768px) { .menu-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } }
+
+        /* الكروت والمنتجات */
+        .card { background: var(--glass); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--tech-blue); }
+        .img-box { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; }
         .img-box img { width: 100%; height: 100%; object-fit: contain; }
-        .category-tag { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.7); border: 1px solid var(--tech-orange); color: var(--tech-orange); padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; }
-
-        .card-info { padding: 12px; }
-        .card-info h3 { margin: 0; font-size: 0.9rem; height: 2.6em; overflow: hidden; }
-        .current-price { color: var(--gold); font-size: 1.1rem; font-weight: 700; display: block; margin-top: 5px; }
-
-        .order-btn { background: var(--whatsapp); color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; }
-
-        /* لوحة التحكم */
-        #adminDashboard { display: none; direction: rtl; background: #000; border: 2px solid var(--gold); padding: 20px; border-radius: 15px; margin-bottom: 30px; font-family: 'Cairo'; }
-        .form-section input, .form-section select { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; width: 100%; margin-bottom: 10px; }
-        .btn { padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; }
-
-        footer { text-align: center; padding: 30px; color: #555; font-size: 0.7rem; border-top: 1px solid #1a1a1a; margin-top: 40px; }
+        .discount-badge { position: absolute; top: 10px; right: 10px; background: #ff4d6d; color: white; padding: 3px 8px; border-radius: 5px; font-size: 0.8rem; font-weight: bold; }
         
-        /* زر DSE المخفي للتحكم */
-        .hidden-admin-btn {
-            background: transparent;
-            color: #1a1a1a; /* لون قريب جداً من لون الخلفية للتمويه */
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            padding: 15px;
-            transition: color 0.3s;
-        }
-        .hidden-admin-btn:active { color: var(--tech-orange); } /* يظهر لون عند الضغط فقط */
+        .card-info { padding: 15px; }
+        .card-info h3 { margin: 0 0 5px 0; font-size: 1rem; height: 2.6em; overflow: hidden; line-height: 1.3; }
+        .card-info p { font-size: 0.8rem; color: #888; margin: 0 0 10px 0; height: 2.4em; overflow: hidden; }
+        .price-row { display: flex; align-items: baseline; gap: 8px; }
+        .old-price { text-decoration: line-through; color: #666; font-size: 0.85rem; }
+        .new-price { color: var(--gold); font-size: 1.2rem; font-weight: 700; }
 
-        .social-float { position: fixed; bottom: 15px; right: 15px; display: flex; flex-direction: column; gap: 8px; z-index: 2000; }
-        .float-btn { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 1.2rem; background: #333; }
+        .order-btn { background: var(--whatsapp); color: white; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; font-weight: 600; }
+
+        /* لوحة التحكم الموسعة */
+        #adminDashboard { display: none; direction: rtl; background: #0a0a0c; border: 2px solid var(--tech-blue); padding: 25px; border-radius: 20px; margin-bottom: 30px; font-family: 'Cairo'; }
+        .admin-sec { background: #151518; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #222; }
+        .admin-sec h4 { margin: 0 0 15px 0; color: var(--tech-orange); border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .admin-sec input, .admin-sec select { background: #000; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 10px; box-sizing: border-box; }
+        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; transition: 0.3s; }
+
+        .social-float { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 2000; }
+        .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 1.4rem; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        
+        footer { text-align: center; padding: 40px 20px; color: #444; font-size: 0.8rem; border-top: 1px solid #111; margin-top: 50px; }
+        .dse-btn { background: transparent; border: none; color: #111; cursor: pointer; font-weight: bold; font-size: 12px; margin-top: 20px; letter-spacing: 2px; transition: 0.3s; }
+        .dse-btn:hover { color: #222; }
     </style>
 </head>
 <body>
 
 <header id="siteHeader">
     <h1 class="logo">Digital Space <span>Electronics</span></h1>
-    <p style="color:var(--gold); font-size: 0.8rem;">PREMIUM TECH SOLUTIONS</p>
+    <p class="slogan">LAPTOPS • SPARE PARTS • ACCESSORIES</p>
 </header>
 
-<div class="controls-container">
-    <div class="search-wrapper">
-        <input type="text" id="searchInput" placeholder="Search products..." onkeyup="runFilter()">
+<div class="search-area">
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search HP, Dell, SSD, Parts..." onkeyup="runFilter()">
     </div>
-    <div class="filter-tags" id="filterBar">
+    <div class="filter-bar">
         <div class="tag active" onclick="setCategory('All', this)">All</div>
         <div class="tag" onclick="setCategory('Laptops', this)">Laptops</div>
         <div class="tag" onclick="setCategory('Spare Parts', this)">Spare Parts</div>
@@ -101,41 +104,56 @@
 
 <div class="container">
     <div id="adminDashboard">
-        <h3 style="text-align:center; color:var(--gold);">لوحة التحكم الخاصة بـ DSE</h3>
+        <h2 style="text-align:center; color:white;">DSE Control Panel</h2>
         
-        <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px; border: 1px solid #222;">
-            <label>تغيير كلمة المرور:</label>
-            <input type="password" id="newPass" placeholder="كلمة المرور الجديدة">
-            <button class="btn" style="background:var(--gold); color:black" onclick="updateSecurePass()">تحديث</button>
+        <div class="admin-sec">
+            <h4>1. Security & Links</h4>
+            <input type="password" id="newPass" placeholder="Update Admin Password">
+            <input type="text" id="newWA" placeholder="WhatsApp (e.g., 971504509223)">
+            <input type="text" id="newIG" placeholder="Instagram URL">
+            <input type="text" id="newFB" placeholder="Facebook URL">
+            <button class="btn" style="background:var(--tech-blue); color:white;" onclick="updateSettings()">Save Settings</button>
         </div>
 
-        <div class="form-section">
-            <label>إضافة منتج:</label>
-            <button class="btn" style="background:#333; color:white" onclick="document.getElementById('imgUpload').click()">تحميل صورة</button>
+        <div class="admin-sec">
+            <h4>2. Appearance</h4>
+            <label>Site Cover (Banner):</label>
+            <input type="file" id="headerFile" accept="image/*" onchange="previewHeader()">
+            <label>General Background:</label>
+            <input type="file" id="bodyFile" accept="image/*" onchange="previewBody()">
+            <button class="btn" style="background:var(--gold); color:black;" onclick="updateVisuals()">Update Visuals</button>
+        </div>
+
+        <div class="admin-sec">
+            <h4>3. Add New Product</h4>
+            <button class="btn" style="background:#222; color:white; border:1px dashed #444; margin-bottom:10px;" onclick="document.getElementById('imgUpload').click()">Choose Product Photo</button>
             <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="previewImg()">
-            <input type="text" id="pName" placeholder="اسم المنتج">
-            <input type="text" id="pSpec" placeholder="المواصفات">
+            <input type="text" id="pName" placeholder="Product Title">
+            <input type="text" id="pSpec" placeholder="Specs (e.g., i7, 16GB, 512GB)">
             <select id="pCat">
                 <option value="Laptops">Laptops</option>
                 <option value="Spare Parts">Spare Parts</option>
                 <option value="Accessories">Accessories</option>
             </select>
-            <input type="number" id="pPrice" placeholder="السعر (AED)">
-            <button class="btn" style="background:var(--tech-orange); color:white" onclick="addProduct()">نشر</button>
+            <input type="number" id="pPrice" placeholder="Original Price (AED)">
+            <input type="number" id="pDisc" placeholder="Discount % (Leave 0 for no discount)">
+            <button class="btn" style="background:var(--tech-orange); color:white;" onclick="addProduct()">Publish Product</button>
         </div>
-        <button class="btn" style="background:#222; color:white" onclick="exitAdmin()">خروج</button>
+        
+        <button class="btn" style="background:#444; color:white;" onclick="exitAdmin()">Close Dashboard</button>
     </div>
 
     <div id="menuGrid" class="menu-grid"></div>
 </div>
 
 <footer>
-    <p>Digital Space Electronics L.L.C | Dubai, UAE<br>Mobile: +971 50 4509223</p>
-    <button class="hidden-admin-btn" onclick="enterAdmin()">DSE</button>
+    <p>Digital Space Electronics L.L.C | Bur-Dubai, Dubai<br>TRN: 1000177244400003</p>
+    <button class="dse-btn" onclick="enterAdmin()">DSE</button>
 </footer>
 
 <div class="social-float">
-    <a href="#" id="waLink" class="float-btn" style="background:var(--whatsapp)"><i class="fab fa-whatsapp"></i></a>
+    <a href="#" id="waLink" class="float-btn" style="background:var(--whatsapp)" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="#" id="igLink" class="float-btn" style="background:#e1306c;" target="_blank"><i class="fab fa-instagram"></i></a>
 </div>
 
 <script>
@@ -151,18 +169,17 @@
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-    let currentImg = "", currentCat = "All", globalWA = "971504509223", isAuthorized = false;
+    let currentImg = "", hImg = "", bImg = "", currentCat = "All", isAuthorized = false, globalWA = "971504509223";
 
     function enterAdmin() {
-        const pass = prompt("DSE Admin Password:");
+        const pass = prompt("DSE Authorization:");
         database.ref('adminPass').once('value', (snap) => {
-            const dbPass = snap.val() || "123";
-            if(pass === dbPass) {
+            if(pass === (snap.val() || "123")) {
                 isAuthorized = true;
                 document.getElementById('adminDashboard').style.display = 'block';
                 window.scrollTo(0,0);
                 renderMenu();
-            } else { alert("Unauthorized access."); }
+            } else { alert("Denied."); }
         });
     }
 
@@ -172,13 +189,58 @@
         renderMenu();
     }
 
-    function updateSecurePass() {
-        const newP = document.getElementById('newPass').value;
-        if(newP.length < 3) return alert("Too short.");
-        database.ref('adminPass').set(newP).then(() => {
-            alert("Updated.");
-            location.reload();
-        });
+    function previewImg() {
+        const reader = new FileReader();
+        reader.onloadend = () => currentImg = reader.result;
+        reader.readAsDataURL(document.getElementById('imgUpload').files[0]);
+    }
+    function previewHeader() {
+        const reader = new FileReader();
+        reader.onloadend = () => hImg = reader.result;
+        reader.readAsDataURL(document.getElementById('headerFile').files[0]);
+    }
+    function previewBody() {
+        const reader = new FileReader();
+        reader.onloadend = () => bImg = reader.result;
+        reader.readAsDataURL(document.getElementById('bodyFile').files[0]);
+    }
+
+    function updateSettings() {
+        const updates = {};
+        const p = document.getElementById('newPass').value;
+        const wa = document.getElementById('newWA').value;
+        const ig = document.getElementById('newIG').value;
+        const fb = document.getElementById('newFB').value;
+        if(p) database.ref('adminPass').set(p);
+        if(wa) updates.wa = wa;
+        if(ig) updates.ig = ig;
+        if(fb) updates.fb = fb;
+        database.ref('settings').update(updates).then(() => alert("Settings Updated!"));
+    }
+
+    function updateVisuals() {
+        const updates = {};
+        if(hImg) updates.hImg = hImg;
+        if(bImg) updates.bImg = bImg;
+        database.ref('settings').update(updates).then(() => { alert("Appearance Updated!"); location.reload(); });
+    }
+
+    function addProduct() {
+        const name = document.getElementById('pName').value;
+        const spec = document.getElementById('pSpec').value;
+        const price = document.getElementById('pPrice').value;
+        const disc = document.getElementById('pDisc').value || 0;
+        const cat = document.getElementById('pCat').value;
+        if(currentImg && name && price) {
+            database.ref('items').push({ name, spec, price, disc, cat, img: currentImg }).then(() => {
+                alert("Product Published!");
+                renderMenu();
+            });
+        }
+    }
+
+    function deleteItem(id) {
+        if(confirm("Delete?")) database.ref('items/' + id).remove().then(() => renderMenu());
     }
 
     function setCategory(cat, el) {
@@ -193,31 +255,6 @@
         renderMenu(search, currentCat);
     }
 
-    function previewImg() {
-        const reader = new FileReader();
-        reader.onloadend = () => currentImg = reader.result;
-        reader.readAsDataURL(document.getElementById('imgUpload').files[0]);
-    }
-
-    function addProduct() {
-        if(!isAuthorized) return;
-        const name = document.getElementById('pName').value;
-        const price = document.getElementById('pPrice').value;
-        const cat = document.getElementById('pCat').value;
-        const spec = document.getElementById('pSpec').value;
-        if(currentImg && name && price) {
-            database.ref('items').push({ name, price, cat, spec, img: currentImg }).then(() => {
-                alert("Success");
-                renderMenu();
-            });
-        }
-    }
-
-    function deleteItem(id) {
-        if(!isAuthorized) return;
-        if(confirm("Delete?")) database.ref('items/' + id).remove().then(() => renderMenu());
-    }
-
     function renderMenu(search = "", cat = "All") {
         database.ref('items').once('value', (snap) => {
             const items = snap.val();
@@ -226,20 +263,30 @@
             if(!items) return;
             Object.keys(items).forEach(id => {
                 const item = items[id];
-                const matchesSearch = item.name.toLowerCase().includes(search);
+                const matchesSearch = item.name.toLowerCase().includes(search) || item.spec.toLowerCase().includes(search);
                 const matchesCat = (cat === "All" || item.cat === cat);
+                
                 if(matchesSearch && matchesCat) {
+                    const disc = parseInt(item.disc || 0);
+                    const finalP = disc > 0 ? Math.round(item.price * (1 - disc/100)) : item.price;
+                    
                     grid.innerHTML += `
                         <div class="card">
                             <div class="img-box">
-                                <span class="category-tag">${item.cat}</span>
+                                ${disc > 0 ? `<div class="discount-badge">-${disc}%</div>` : ''}
                                 <img src="${item.img}">
                             </div>
                             <div class="card-info">
                                 <h3>${item.name}</h3>
-                                <span class="current-price">${item.price} AED</span>
-                                <a href="https://wa.me/${globalWA}?text=Order: ${item.name}" class="order-btn"><i class="fab fa-whatsapp"></i> Order Now</a>
-                                ${isAuthorized ? `<button onclick="deleteItem('${id}')" style="background:red; color:white; border:none; width:100%; margin-top:5px; padding:5px; border-radius:5px;">Delete</button>` : ''}
+                                <p>${item.spec}</p>
+                                <div class="price-row">
+                                    ${disc > 0 ? `<span class="old-price">${item.price}</span>` : ''}
+                                    <span class="new-price">${finalP} AED</span>
+                                </div>
+                                <a href="https://wa.me/${globalWA}?text=I'm interested in: ${item.name}" class="order-btn">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </a>
+                                ${isAuthorized ? `<button onclick="deleteItem('${id}')" style="background:red; color:white; border:none; width:100%; margin-top:10px; padding:8px; border-radius:5px; cursor:pointer;">Delete</button>` : ''}
                             </div>
                         </div>`;
                 }
@@ -247,8 +294,18 @@
         });
     }
 
+    database.ref('settings').on('value', (snap) => {
+        const s = snap.val();
+        if(s) {
+            if(s.wa) globalWA = s.wa;
+            document.getElementById('waLink').href = "https://wa.me/" + globalWA;
+            document.getElementById('igLink').href = s.ig || "#";
+            if(s.hImg) document.getElementById('siteHeader').style.backgroundImage = `linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,86,179,0.4)), url(${s.hImg})`;
+            if(s.bImg) document.body.style.backgroundImage = `url(${s.bImg})`;
+        }
+    });
+
     renderMenu();
 </script>
 </body>
 </html>
-
