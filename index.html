@@ -30,9 +30,8 @@
 
         .logo { font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700; margin: 0; }
         .logo span { color: var(--tech-orange); }
-        .slogan { color: var(--gold); font-size: 0.9rem; margin-top: 5px; letter-spacing: 1px; }
+        .slogan { color: var(--gold); font-size: 0.8rem; margin-top: 5px; letter-spacing: 1px; }
 
-        /* شريط البحث */
         .search-area { padding: 0 5%; margin: -20px 0 20px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; position: sticky; top: 10px; z-index: 1000; }
         .search-box { 
             position: relative; width: 100%; max-width: 350px; 
@@ -50,38 +49,45 @@
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         @media (min-width: 768px) { .menu-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } }
 
-        /* كرت المنتج */
-        .card { background: var(--glass); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; cursor: pointer; }
+        /* كرت المنتج الرئيسي */
+        .card { background: var(--glass); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; position: relative; }
         .card:hover { transform: translateY(-5px); border-color: var(--tech-blue); }
-        .img-box { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; }
+        .img-box { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; cursor: pointer; }
         .img-box img { width: 100%; height: 100%; object-fit: contain; }
-        .discount-badge { position: absolute; top: 10px; right: 10px; background: #ff4d6d; color: white; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
+        .discount-badge { position: absolute; top: 10px; right: 10px; background: #ff4d6d; color: white; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; z-index: 10; }
         
         .card-info { padding: 12px; }
-        .card-info h3 { margin: 0 0 5px 0; font-size: 0.9rem; height: 1.3em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .card-info p { font-size: 0.75rem; color: #888; margin: 0 0 8px 0; height: 1.2em; overflow: hidden; }
-        .new-price { color: var(--gold); font-size: 1.1rem; font-weight: 700; }
+        .card-info h3 { margin: 0 0 5px 0; font-size: 0.9rem; height: 1.3em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; }
+        .new-price { color: var(--gold); font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; display: block; }
 
-        /* النافذة الحوارية (Modal) */
+        /* زر الطلب الموحد */
+        .order-btn-global { 
+            background: var(--whatsapp); color: white; text-decoration: none; 
+            padding: 8px; border-radius: 8px; font-size: 0.8rem; 
+            display: flex; align-items: center; justify-content: center; gap: 5px; 
+            font-weight: 600; border: none; cursor: pointer; transition: 0.2s;
+        }
+        .order-btn-global:hover { background: #1eb954; }
+
+        /* النافذة الحوارية */
         .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); }
         .modal-content { 
             position: relative; background: #0f0f12; margin: 5% auto; padding: 20px; border: 1px solid var(--tech-blue); 
-            width: 90%; max-width: 500px; border-radius: 20px; text-align: center; max-height: 85vh; overflow-y: auto;
+            width: 85%; max-width: 450px; border-radius: 20px; text-align: center; max-height: 85vh; overflow-y: auto;
         }
-        .close-modal { position: absolute; top: 15px; right: 20px; color: white; font-size: 30px; cursor: pointer; }
-        .modal-img { width: 100%; max-height: 300px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 15px; }
-        .modal-details h2 { color: var(--tech-orange); margin: 10px 0; }
-        .modal-details p { color: #ccc; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
-        .modal-price { font-size: 1.5rem; color: var(--gold); font-weight: bold; margin-bottom: 20px; display: block; }
+        .close-modal { position: absolute; top: 10px; right: 15px; color: white; font-size: 28px; cursor: pointer; z-index: 100; }
+        .modal-img { width: 100%; max-height: 250px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 15px; }
+        .modal-details h2 { color: var(--tech-orange); margin: 5px 0; font-size: 1.3rem; }
+        .modal-details p { color: #ccc; line-height: 1.5; margin-bottom: 15px; white-space: pre-wrap; font-size: 0.9rem; }
         
         /* لوحة التحكم */
-        #adminDashboard { display: none; direction: rtl; background: #0a0a0c; border: 2px solid var(--tech-blue); padding: 25px; border-radius: 20px; margin-bottom: 30px; font-family: 'Cairo'; }
-        .admin-sec { background: #151518; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #222; }
-        .admin-sec input, .admin-sec select, .admin-sec textarea { background: #000; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 10px; box-sizing: border-box; }
-        .btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        #adminDashboard { display: none; direction: rtl; background: #0a0a0c; border: 2px solid var(--tech-blue); padding: 20px; border-radius: 20px; margin-bottom: 30px; font-family: 'Cairo'; }
+        .admin-sec { background: #151518; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
+        .admin-sec input, .admin-sec select, .admin-sec textarea { background: #000; border: 1px solid #333; color: white; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 8px; box-sizing: border-box; }
+        .btn-adm { padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; }
 
-        footer { text-align: center; padding: 40px 20px; color: #333; font-size: 0.8rem; }
-        .dse-btn { background: transparent; border: none; color: #111; cursor: pointer; font-size: 12px; margin-top: 20px; letter-spacing: 2px; }
+        footer { text-align: center; padding: 30px 20px; color: #222; font-size: 0.8rem; }
+        .dse-btn { background: transparent; border: none; color: #111; cursor: pointer; font-size: 11px; margin-top: 15px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -106,22 +112,20 @@
 
 <div class="container">
     <div id="adminDashboard">
-        <h2 style="text-align:center;">DSE Control Panel</h2>
+        <h3 style="text-align:center;">DSE ADMIN PANEL</h3>
         <div class="admin-sec">
-            <h4>Settings & Appearance</h4>
-            <input type="password" id="newPass" placeholder="New Admin Password">
-            <input type="text" id="newWA" placeholder="WhatsApp (97150...)">
-            <label>Site Cover:</label><input type="file" id="headerFile" accept="image/*" onchange="previewHeader()">
-            <label>General BG:</label><input type="file" id="bodyFile" accept="image/*" onchange="previewBody()">
-            <button class="btn" style="background:var(--tech-blue); color:white;" onclick="updateSettings()">Save All Changes</button>
+            <input type="password" id="newPass" placeholder="Change Password">
+            <input type="text" id="newWA" placeholder="WhatsApp Number">
+            <label style="font-size:12px;">Banner Image:</label><input type="file" id="headerFile" accept="image/*" onchange="previewHeader()">
+            <label style="font-size:12px;">Background Image:</label><input type="file" id="bodyFile" accept="image/*" onchange="previewBody()">
+            <button class="btn-adm" style="background:var(--tech-blue); color:white;" onclick="updateSettings()">Save Settings</button>
         </div>
 
         <div class="admin-sec">
-            <h4>Add Product</h4>
-            <button class="btn" style="background:#222; color:white; margin-bottom:10px;" onclick="document.getElementById('imgUpload').click()">Upload Photo</button>
+            <button class="btn-adm" style="background:#222; color:white; margin-bottom:10px;" onclick="document.getElementById('imgUpload').click()">Upload Product Photo</button>
             <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="previewImg()">
-            <input type="text" id="pName" placeholder="Product Title">
-            <textarea id="pSpec" rows="3" placeholder="Full Description (will show in pop-up)"></textarea>
+            <input type="text" id="pName" placeholder="Product Name">
+            <textarea id="pSpec" rows="2" placeholder="Product Description/Specs"></textarea>
             <select id="pCat">
                 <option value="Laptops">Laptops</option>
                 <option value="Spare Parts">Spare Parts</option>
@@ -129,9 +133,9 @@
             </select>
             <input type="number" id="pPrice" placeholder="Price (AED)">
             <input type="number" id="pDisc" placeholder="Discount %">
-            <button class="btn" style="background:var(--tech-orange); color:white;" onclick="addProduct()">Publish</button>
+            <button class="btn-adm" style="background:var(--tech-orange); color:white;" onclick="addProduct()">Publish Now</button>
         </div>
-        <button class="btn" style="background:#444; color:white;" onclick="exitAdmin()">Close</button>
+        <button class="btn-adm" style="background:#444; color:white;" onclick="exitAdmin()">Logout</button>
     </div>
 
     <div id="menuGrid" class="menu-grid"></div>
@@ -143,15 +147,15 @@
         <img id="modalImg" class="modal-img" src="">
         <div class="modal-details">
             <h2 id="modalTitle"></h2>
-            <span id="modalPrice" class="modal-price"></span>
+            <span id="modalPrice" style="color:var(--gold); font-size:1.4rem; font-weight:bold; display:block; margin-bottom:10px;"></span>
             <p id="modalDesc"></p>
-            <a href="#" id="modalWALink" class="btn" style="background:var(--whatsapp); color:white; text-decoration:none; display:block;">ORDER NOW</a>
+            <a href="#" id="modalWALink" class="order-btn-global" style="font-size:1rem; padding:12px;"><i class="fab fa-whatsapp"></i> ORDER ON WHATSAPP</a>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>Digital Space Electronics L.L.C | Dubai, UAE<br>TRN: 1000177244400003</p>
+    <p>Digital Space Electronics L.L.C | Dubai<br>TRN: 1000177244400003</p>
     <button class="dse-btn" onclick="enterAdmin()">DSE</button>
 </footer>
 
@@ -171,7 +175,7 @@
     let currentImg = "", hImg = "", bImg = "", currentCat = "All", isAuthorized = false, globalWA = "971504509223";
 
     function enterAdmin() {
-        const pass = prompt("DSE Admin:");
+        const pass = prompt("DSE Security:");
         database.ref('adminPass').once('value', (snap) => {
             if(pass === (snap.val() || "123")) { isAuthorized = true; document.getElementById('adminDashboard').style.display = 'block'; window.scrollTo(0,0); renderMenu(); }
         });
@@ -200,28 +204,28 @@
         const disc = document.getElementById('pDisc').value || 0;
         const cat = document.getElementById('pCat').value;
         if(currentImg && name && price) {
-            database.ref('items').push({ name, spec, price, disc, cat, img: currentImg }).then(() => { alert("Done!"); location.reload(); });
+            database.ref('items').push({ name, spec, price, disc, cat, img: currentImg }).then(() => { alert("Success!"); location.reload(); });
         }
     }
 
     function showDetails(name, spec, price, disc, img) {
-        const finalP = disc > 0 ? Math.round(price * (1 - disc/100)) : price;
+        const fp = disc > 0 ? Math.round(price * (1 - disc/100)) : price;
         document.getElementById('modalTitle').innerText = name;
         document.getElementById('modalDesc').innerText = spec;
-        document.getElementById('modalPrice').innerText = finalP + " AED";
+        document.getElementById('modalPrice').innerText = fp + " AED";
         document.getElementById('modalImg').src = img;
-        document.getElementById('modalWALink').href = `https://wa.me/${globalWA}?text=Order: ${name}`;
+        document.getElementById('modalWALink').href = `https://wa.me/${globalWA}?text=Order Request: ${name}`;
         document.getElementById('productModal').style.display = "block";
     }
 
     function closeModal() { document.getElementById('productModal').style.display = "none"; }
 
-    function deleteItem(id, e) { e.stopPropagation(); if(confirm("Delete?")) database.ref('items/' + id).remove().then(() => renderMenu()); }
+    function deleteItem(id, e) { e.stopPropagation(); if(confirm("Delete product?")) database.ref('items/' + id).remove().then(() => renderMenu()); }
 
     function setCategory(cat, el) {
         document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
-        currentCat = cat; runFilter();
+        currentCat = cat; renderMenu(document.getElementById('searchInput').value.toLowerCase(), cat);
     }
 
     function runFilter() { renderMenu(document.getElementById('searchInput').value.toLowerCase(), currentCat); }
@@ -238,16 +242,18 @@
                     const d = parseInt(item.disc || 0);
                     const fp = d > 0 ? Math.round(item.price * (1 - d/100)) : item.price;
                     grid.innerHTML += `
-                        <div class="card" onclick="showDetails('${item.name}', \`${item.spec}\`, ${item.price}, ${d}, '${item.img}')">
-                            <div class="img-box">
-                                ${d > 0 ? `<div class="discount-badge">-${d}% OFF</div>` : ''}
+                        <div class="card">
+                            ${d > 0 ? `<div class="discount-badge">-${d}% OFF</div>` : ''}
+                            <div class="img-box" onclick="showDetails('${item.name}', \`${item.spec}\`, ${item.price}, ${d}, '${item.img}')">
                                 <img src="${item.img}">
                             </div>
                             <div class="card-info">
-                                <h3>${item.name}</h3>
-                                <p>${item.spec.substring(0, 30)}...</p>
+                                <h3 onclick="showDetails('${item.name}', \`${item.spec}\`, ${item.price}, ${d}, '${item.img}')">${item.name}</h3>
                                 <span class="new-price">${fp} AED</span>
-                                ${isAuthorized ? `<button onclick="deleteItem('${id}', event)" style="background:red; color:white; border:none; width:100%; margin-top:8px; padding:5px; border-radius:5px;">Delete</button>` : ''}
+                                <a href="https://wa.me/${globalWA}?text=Order Request: ${item.name}" class="order-btn-global">
+                                    <i class="fab fa-whatsapp"></i> Order Now
+                                </a>
+                                ${isAuthorized ? `<button onclick="deleteItem('${id}', event)" style="background:red; color:white; border:none; width:100%; margin-top:8px; padding:5px; border-radius:5px; cursor:pointer; font-size:10px;">DELETE</button>` : ''}
                             </div>
                         </div>`;
                 }
