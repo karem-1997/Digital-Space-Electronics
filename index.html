@@ -58,7 +58,7 @@
         
         .card-info { padding: 12px; }
         .card-info h3 { margin: 0 0 5px 0; font-size: 0.9rem; height: 1.3em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; }
-        .product-code-display { font-size: 0.7rem; color: #aaa; margin-bottom: 5px; display: block; }
+        .product-code-display { font-size: 0.7rem; color: var(--gold); margin-bottom: 5px; display: block; font-weight: 600; }
         
         .price-container { margin-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .old-price-strike { text-decoration: line-through; color: #777; font-size: 0.8rem; }
@@ -80,21 +80,16 @@
         .ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); }
         .tk { background: #000; }
 
-        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); }
-        .modal-content { 
-            position: relative; background: #0f0f12; margin: 5% auto; padding: 20px; border: 1px solid var(--tech-blue); 
-            width: 85%; max-width: 450px; border-radius: 20px; text-align: center; max-height: 85vh; overflow-y: auto;
-        }
-        .close-modal { position: absolute; top: 10px; right: 15px; color: white; font-size: 28px; cursor: pointer; z-index: 100; }
-        .modal-img { width: 100%; max-height: 250px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 15px; }
-        .modal-details h2 { color: var(--tech-orange); margin: 5px 0; font-size: 1.3rem; }
-        .modal-code { color: #888; font-size: 0.8rem; margin-bottom: 10px; display: block; }
-        .modal-details p { color: #ccc; line-height: 1.5; margin-bottom: 15px; white-space: pre-wrap; font-size: 0.9rem; }
-
         #adminDashboard { display: none; direction: rtl; background: #0a0a0c; border: 2px solid var(--tech-blue); padding: 20px; border-radius: 20px; margin-bottom: 30px; font-family: 'Cairo'; }
         .admin-sec { background: #151518; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
         .admin-sec input, .admin-sec select, .admin-sec textarea { background: #000; border: 1px solid #333; color: white; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 8px; box-sizing: border-box; }
         .btn-adm { padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; }
+
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); }
+        .modal-content { position: relative; background: #0f0f12; margin: 5% auto; padding: 20px; border: 1px solid var(--tech-blue); width: 85%; max-width: 450px; border-radius: 20px; text-align: center; max-height: 85vh; overflow-y: auto; }
+        .close-modal { position: absolute; top: 10px; right: 15px; color: white; font-size: 28px; cursor: pointer; z-index: 100; }
+        .modal-img { width: 100%; max-height: 250px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 15px; }
+        .modal-code { color: var(--tech-orange); font-size: 0.8rem; margin-bottom: 10px; display: block; font-weight: bold; }
 
         footer { text-align: center; padding: 30px 20px; color: #1a1a1a; font-size: 0.8rem; }
         .dse-btn { background: transparent; border: none; color: #111; cursor: pointer; font-size: 11px; margin-top: 15px; letter-spacing: 2px; }
@@ -124,25 +119,25 @@
     <div id="adminDashboard">
         <h3 style="text-align:center;">لوحة تحكم DSE</h3>
         <div class="admin-sec">
-            <h4>روابط التواصل والمظهر</h4>
+            <h4>إعدادات الروابط والمظهر</h4>
             <input type="text" id="newWA" placeholder="رقم الواتساب">
             <input type="text" id="newFB" placeholder="رابط الفيسبوك">
             <input type="text" id="newTW" placeholder="رابط تويتر (X)">
             <input type="text" id="newIG" placeholder="رابط انستغرام">
             <input type="text" id="newTK" placeholder="رابط تيك توك">
-            <input type="password" id="newPass" placeholder="تغيير كلمة المرور">
-            <label style="font-size:12px;">الغلاف:</label><input type="file" id="headerFile" accept="image/*" onchange="previewHeader()">
-            <label style="font-size:12px;">الخلفية:</label><input type="file" id="bodyFile" accept="image/*" onchange="previewBody()">
-            <button class="btn-adm" style="background:var(--tech-blue); color:white;" onclick="updateSettings()">حفظ الإعدادات</button>
+            <input type="password" id="newPass" placeholder="كلمة مرور جديدة">
+            <label style="font-size:12px;">تغيير الغلاف:</label><input type="file" id="headerFile" onchange="previewHeader()">
+            <label style="font-size:12px;">تغيير الخلفية:</label><input type="file" id="bodyFile" onchange="previewBody()">
+            <button class="btn-adm" style="background:var(--tech-blue); color:white;" onclick="updateSettings()">حفظ التعديلات</button>
         </div>
 
         <div class="admin-sec">
             <h4>إضافة منتج جديد</h4>
-            <button class="btn-adm" style="background:#222; color:white; margin-bottom:10px;" onclick="document.getElementById('imgUpload').click()">صورة المنتج</button>
+            <button class="btn-adm" style="background:#222; color:white; margin-bottom:10px;" onclick="document.getElementById('imgUpload').click()">تحميل صورة المنتج</button>
             <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="previewImg()">
             <input type="text" id="pName" placeholder="اسم المنتج">
-            <input type="text" id="pCode" placeholder="رمز المنتج (مثال: DSE-101)">
-            <textarea id="pSpec" rows="2" placeholder="وصف المنتج"></textarea>
+            <input type="text" id="pCode" placeholder="رمز المنتج (مثال: DSE-100)">
+            <textarea id="pSpec" rows="2" placeholder="المواصفات"></textarea>
             <select id="pCat">
                 <option value="أجهزة الكمبيوتر المحمولة">أجهزة الكمبيوتر المحمولة</option>
                 <option value="قطع غيار">قطع غيار</option>
@@ -150,7 +145,7 @@
             </select>
             <input type="number" id="pPrice" placeholder="السعر">
             <input type="number" id="pDisc" placeholder="الخصم %">
-            <button class="btn-adm" style="background:var(--tech-orange); color:white;" onclick="addProduct()">نشر المنتج</button>
+            <button class="btn-adm" style="background:var(--tech-orange); color:white;" onclick="addProduct()">نشر المنتج الآن</button>
         </div>
         <button class="btn-adm" style="background:#444; color:white;" onclick="exitAdmin()">إغلاق لوحة التحكم</button>
     </div>
@@ -202,7 +197,7 @@
     function enterAdmin() {
         const pass = prompt("رمز الدخول:");
         database.ref('adminPass').once('value', (snap) => {
-            if(pass === (snap.val() || "123")) { isAuthorized = true; document.getElementById('adminDashboard').style.display = 'block'; window.scrollTo(0,0); renderMenu(); }
+            if(pass === (snap.val() || "123")) { isAuthorized = true; document.getElementById('adminDashboard').style.display = 'block'; window.scrollTo(0,0); }
         });
     }
     function exitAdmin() { isAuthorized = false; document.getElementById('adminDashboard').style.display = 'none'; }
@@ -222,7 +217,7 @@
         if(p) database.ref('adminPass').set(p);
         if(wa) up.wa = wa; if(fb) up.fb = fb; if(tw) up.tw = tw; if(ig) up.ig = ig; if(tk) up.tk = tk;
         if(hImg) up.hImg = hImg; if(bImg) up.bImg = bImg;
-        database.ref('settings').update(up).then(() => { alert("تم حفظ الإعدادات بنجاح!"); });
+        database.ref('settings').update(up).then(() => alert("تم التحديث!"));
     }
 
     function addProduct() {
@@ -233,40 +228,35 @@
         const disc = document.getElementById('pDisc').value || 0;
         const cat = document.getElementById('pCat').value;
         if(currentImg && name && price) {
-            database.ref('items').push({ name, code, spec, price, disc, cat, img: currentImg }).then(() => { 
-                alert("تم إضافة المنتج بنجاح!"); 
-                // مسح البيانات من الخانات لإضافة منتج آخر
-                document.getElementById('pName').value = "";
-                document.getElementById('pCode').value = "";
-                document.getElementById('pSpec').value = "";
-                document.getElementById('pPrice').value = "";
-                document.getElementById('pDisc').value = "";
-                currentImg = "";
-                renderMenu(); 
+            database.ref('items').push({ name, code, spec, price, disc, cat, img: currentImg }).then(() => {
+                alert("تم النشر!");
+                document.getElementById('pName').value = ""; document.getElementById('pCode').value = "";
+                document.getElementById('pSpec').value = ""; document.getElementById('pPrice').value = "";
+                document.getElementById('pDisc').value = ""; currentImg = "";
             });
-        } else { alert("يرجى ملء البيانات الأساسية (الاسم، السعر، الصورة)"); }
+        }
     }
 
     function showDetails(name, code, spec, price, disc, img) {
         const d = parseInt(disc || 0);
         const fp = d > 0 ? Math.round(price * (1 - d/100)) : price;
         document.getElementById('modalTitle').innerText = name;
-        document.getElementById('modalCode').innerText = "رمز المنتج: " + code;
+        document.getElementById('modalCode').innerText = "الرمز: " + code;
         document.getElementById('modalDesc').innerText = spec;
         document.getElementById('modalImg').src = img;
         let pHTML = d > 0 ? `<span class="old-price-strike">${price} AED</span>` : '';
         pHTML += `<span class="new-price-highlight">${fp} AED</span>`;
         document.getElementById('modalPriceContainer').innerHTML = pHTML;
-        document.getElementById('modalWALink').href = `https://wa.me/${globalWA}?text=طلب منتج: ${name} - رمز المنتج: ${code}`;
+        document.getElementById('modalWALink').href = `https://wa.me/${globalWA}?text=طلب منتج: ${name} - الرمز: ${code}`;
         document.getElementById('productModal').style.display = "block";
     }
 
     function closeModal() { document.getElementById('productModal').style.display = "none"; }
-    function deleteItem(id, e) { e.stopPropagation(); if(confirm("حذف؟")) database.ref('items/' + id).remove().then(() => renderMenu()); }
+    function deleteItem(id, e) { e.stopPropagation(); if(confirm("حذف؟")) database.ref('items/' + id).remove(); }
     function setCategory(cat, el) {
         document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
-        currentCat = cat; renderMenu(document.getElementById('searchInput').value.toLowerCase(), cat);
+        currentCat = cat; runFilter();
     }
     function runFilter() { renderMenu(document.getElementById('searchInput').value.toLowerCase(), currentCat); }
 
@@ -293,7 +283,7 @@
                                     ${d > 0 ? `<span class="old-price-strike">${item.price} AED</span>` : ''}
                                     <span class="new-price-highlight">${fp} AED</span>
                                 </div>
-                                <a href="https://wa.me/${globalWA}?text=طلب منتج: ${item.name} - رمز المنتج: ${item.code}" class="order-btn-global">
+                                <a href="https://wa.me/${globalWA}?text=طلب منتج: ${item.name} - الرمز: ${item.code}" class="order-btn-global">
                                     <i class="fab fa-whatsapp"></i> اطلب الآن
                                 </a>
                                 ${isAuthorized ? `<button onclick="deleteItem('${id}', event)" style="background:red; color:white; border:none; width:100%; margin-top:8px; padding:5px; border-radius:5px;">حذف</button>` : ''}
