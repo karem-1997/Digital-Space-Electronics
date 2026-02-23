@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Space Electronics | Dubai Store</title>
+    <title>Digital Space Electronics | Management System</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -35,7 +35,6 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; overflow-y: auto; padding: 20px; }
         .modal-content { background: #111; padding: 25px; border-radius: 20px; max-width: 500px; margin: 30px auto; border: 1px solid var(--orange); }
         
-        /* تصميم الفاتورة المحسن */
         #invoiceBox { background: white; color: black; padding: 25px; direction: ltr; font-family: 'Cairo', sans-serif; border-radius: 5px; }
         .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .inv-table th { background: #f2f2f2; text-align: left; padding: 8px; border: 1px solid #ddd; font-size: 0.8rem; }
@@ -45,6 +44,7 @@
         .btn-orange { background: var(--orange); color: white; }
         .btn-blue { background: var(--blue); color: white; }
         .btn-order { background: var(--blue); color: white; margin: 10px auto; width: 90%; font-size: 0.9rem; }
+        .btn-small { padding: 5px 10px; font-size: 0.75rem; width: auto; margin: 0 2px; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -63,7 +63,7 @@
 <div id="storeGrid" class="grid"></div>
 
 <div id="adminPanel">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <h2 style="color:var(--orange)">لوحة التحكم الكاملة</h2>
         <button onclick="document.getElementById('adminPanel').style.display='none'" style="background:red; color:white; border:none; padding:10px 20px; border-radius:10px;">خروج</button>
     </div>
@@ -91,8 +91,13 @@
     </div>
 
     <div class="admin-box">
-        <h3>📑 طلبات الفواتير (Tax Invoice)</h3>
+        <h3>🚨 طلبات جديدة (قيد التنفيذ)</h3>
         <div id="listOrders"></div>
+    </div>
+
+    <div class="admin-box">
+        <h3>✅ أرشيف الفواتير المكتملة</h3>
+        <div id="listArchive"></div>
     </div>
 
     <div class="admin-box">
@@ -119,42 +124,26 @@
                         <small>Digital Space Electronics L.L.C</small><br>
                         <small>TRN: 1000177244400003</small>
                     </div>
-                    <div style="text-align:right"><b>DSE</b><br><small id="v_date" style="font-size:0.7rem;"></small></div>
+                    <div style="text-align:right">
+                        <b>DSE</b><br>
+                        <small style="font-size:0.7rem;">Inv #: <span id="v_serial"></span></small><br>
+                        <small id="v_date" style="font-size:0.7rem;"></small>
+                    </div>
                 </div>
-
                 <div style="margin:15px 0; font-size:0.8rem; line-height:1.4;">
                     <b>Customer:</b> <span id="v_name"></span><br>
                     <b>Phone:</b> <span id="v_phone"></span><br>
                     <b>Address:</b> <span id="v_addr"></span>
                 </div>
-
                 <table class="inv-table">
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Item Code</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td id="v_item"></td>
-                            <td id="v_code"></td>
-                            <td id="v_price" style="text-align:right;"></td>
-                        </tr>
-                    </tbody>
+                    <thead><tr><th>Description</th><th>Item Code</th><th>Total</th></tr></thead>
+                    <tbody><tr><td id="v_item"></td><td id="v_code"></td><td id="v_price" style="text-align:right;"></td></tr></tbody>
                 </table>
-
-                <div style="text-align:right; margin-top:15px; font-weight:bold; font-size:1.3rem; border-top:2px solid #000; padding-top:5px;">
-                    Grand Total: <span id="v_total"></span> AED
-                </div>
-
-                <div id="invAlert" style="margin-top:20px; padding:10px; border:2px dashed red; color:red; text-align:center; font-weight:bold; font-size:0.8rem;">
-                   ⚠️ يرجى حفظ الطلب وإرساله للواتساب للتاكيد
-                </div>
+                <div style="text-align:right; margin-top:15px; font-weight:bold; font-size:1.3rem; border-top:2px solid #000; padding-top:5px;">Grand Total: <span id="v_total"></span> AED</div>
+                <div id="invAlert" style="margin-top:20px; padding:10px; border:2px dashed red; color:red; text-align:center; font-weight:bold; font-size:0.8rem;">⚠️ يرجى حفظ الطلب وإرساله للواتساب للتاكيد</div>
             </div>
             <button class="btn btn-blue" onclick="downloadInv()">حفظ كصورة 📥</button>
-            <button class="btn" style="background:var(--wa); color:white;" onclick="sendWA()">إرسال الآن للواتساب 💬</button>
+            <button class="btn" id="waFinalBtn" style="background:var(--wa); color:white;" onclick="sendWA()">إرسال الآن للواتساب 💬</button>
         </div>
         <button class="btn" style="background:none; color:#999;" onclick="closeModal()">إغلاق</button>
     </div>
@@ -167,14 +156,14 @@
     let tempImg = "", activeP = null, sets = {};
 
     db.ref('settings').on('value', s => {
-        sets = s.val() || { title: "Digital Space Electronics", wa: "971504509223", fb: "#", ig: "#" };
+        sets = s.val() || { title: "Digital Space Electronics", wa: "971504509223", fb: "#", ig: "#", lastSerial: 1000 };
         document.getElementById('shopName').innerText = sets.title;
         document.getElementById('linkWA').href = `https://wa.me/${sets.wa}`;
         document.getElementById('linkFB').href = sets.fb;
         document.getElementById('linkIG').href = sets.ig;
     });
 
-    function saveSets() { db.ref('settings').set({ title: document.getElementById('setT').value, wa: document.getElementById('setW').value, fb: document.getElementById('setF').value, ig: document.getElementById('setI').value }).then(() => alert("Saved")); }
+    function saveSets() { db.ref('settings').update({ title: document.getElementById('setT').value, wa: document.getElementById('setW').value, fb: document.getElementById('setF').value, ig: document.getElementById('setI').value }).then(() => alert("Saved")); }
     function encodeImg() { const f = document.getElementById('pImg').files[0]; const r = new FileReader(); r.onloadend = () => tempImg = r.result; r.readAsDataURL(f); }
 
     function handleP() {
@@ -197,21 +186,8 @@
         const data = s.val(); if(data) Object.keys(data).forEach(k => {
             const i = data[k];
             const disc = i.old ? Math.round(((i.old - i.price)/i.old)*100) : 0;
-            grid.innerHTML += `<div class="card">
-                ${disc > 0 ? `<div class="discount-tag">SAVE ${disc}%</div>` : ''}
-                <img src="${i.img}" class="card-img">
-                <div style="padding:12px; flex-grow:1;">
-                    <small style="color:#666; font-size:0.7rem;">PN: ${i.code}</small>
-                    <h4 style="margin:5px 0; font-size:0.85rem; height:40px; overflow:hidden;">${i.name}</h4>
-                    <div style="margin-bottom:10px;">
-                        <span style="color:var(--orange); font-weight:bold; font-size:1.1rem;">${i.price} AED</span>
-                    </div>
-                </div>
-                <button class="btn btn-order" onclick="openOrder('${k}')">اطلب الآن</button>
-            </div>`;
-            list.innerHTML += `<div class="edit-row"><div style="display:flex; align-items:center; gap:10px;"><img src="${i.img}"><span><b>${i.name}</b></span></div>
-                <div><button onclick="editItem('${k}')" style="background:orange; border:none; padding:8px; border-radius:8px;">تعديل</button>
-                <button onclick="db.ref('items/${k}').remove()" style="background:red; border:none; color:white; padding:8px; border-radius:8px;">حذف</button></div></div>`;
+            grid.innerHTML += `<div class="card">${disc > 0 ? `<div class="discount-tag">SAVE ${disc}%</div>` : ''}<img src="${i.img}" class="card-img"><div style="padding:12px; flex-grow:1;"><small style="color:#666; font-size:0.7rem;">PN: ${i.code}</small><h4 style="margin:5px 0; font-size:0.85rem; height:40px; overflow:hidden;">${i.name}</h4><span style="color:var(--orange); font-weight:bold; font-size:1.1rem;">${i.price} AED</span></div><button class="btn btn-order" onclick="openOrder('${k}')">اطلب الآن</button></div>`;
+            list.innerHTML += `<div class="edit-row"><div style="display:flex; align-items:center; gap:10px;"><img src="${i.img}"><span><b>${i.name}</b></span></div><div><button onclick="editItem('${k}')" style="background:orange; border:none; padding:8px; border-radius:8px;">تعديل</button> <button onclick="db.ref('items/${k}').remove()" style="background:red; border:none; color:white; padding:8px; border-radius:8px;">حذف</button></div></div>`;
         });
     });
 
@@ -221,9 +197,7 @@
             document.getElementById('pN').value = i.name; document.getElementById('pC').value = i.code;
             document.getElementById('pOld').value = i.old; document.getElementById('pNew').value = i.price;
             document.getElementById('pDesc').value = i.desc; tempImg = i.img;
-            document.getElementById('admTitle').innerText = "📝 تعديل المنتج";
-            document.getElementById('savePBtn').innerText = "تحديث البيانات";
-            document.getElementById('cancelEdit').style.display = "block";
+            document.getElementById('admTitle').innerText = "📝 تعديل المنتج"; document.getElementById('savePBtn').innerText = "تحديث البيانات"; document.getElementById('cancelEdit').style.display = "block";
             window.scrollTo(0,0);
         });
     }
@@ -231,52 +205,66 @@
     function openOrder(k) {
         db.ref('items/'+k).once('value', s => {
             activeP = s.val(); document.getElementById('targetN').innerText = activeP.name;
-            document.getElementById('modal').style.display = 'block';
-            document.getElementById('formSection').style.display = 'block';
-            document.getElementById('invoiceSection').style.display = 'none';
+            document.getElementById('modal').style.display = 'block'; document.getElementById('formSection').style.display = 'block'; document.getElementById('invoiceSection').style.display = 'none';
         });
     }
 
     function submitOrder() {
         const n = document.getElementById('cuN').value, p = document.getElementById('cuP').value;
-        if(!n || !p) return alert("يرجى إكمال البيانات");
-        const order = { ...activeP, customer: n, phone: p, addr: document.getElementById('cuA').value, date: new Date().toLocaleString() };
-        db.ref('orders').push(order).then(() => { 
-            document.getElementById('docType').innerText = "PURCHASE ORDER";
-            document.getElementById('invAlert').style.display = "block";
-            renderInvoice(order); 
-        });
+        if(!n || !p) return alert("الاسم والهاتف مطلوبان");
+        const newSerial = (sets.lastSerial || 1000) + 1;
+        const now = new Date().toLocaleString('en-GB');
+        const order = { ...activeP, customer: n, phone: p, addr: document.getElementById('cuA').value, date: now, serial: newSerial, status: 'new' };
+        db.ref('orders').push(order);
+        db.ref('settings').update({ lastSerial: newSerial });
+        document.getElementById('docType').innerText = "PURCHASE ORDER";
+        document.getElementById('invAlert').style.display = "block";
+        document.getElementById('waFinalBtn').style.display = "block";
+        renderInvoice(order, false);
     }
 
-    function renderInvoice(o) {
+    function renderInvoice(o, isLiveTime) {
         document.getElementById('v_name').innerText = o.customer; document.getElementById('v_phone').innerText = o.phone;
-        document.getElementById('v_addr').innerText = o.addr || "Dubai"; document.getElementById('v_date').innerText = o.date;
+        document.getElementById('v_addr').innerText = o.addr || "Dubai"; document.getElementById('v_serial').innerText = o.serial;
+        document.getElementById('v_date').innerText = isLiveTime ? new Date().toLocaleString('en-GB') : o.date;
         document.getElementById('v_item').innerText = o.name; document.getElementById('v_code').innerText = o.code || 'N/A';
         document.getElementById('v_price').innerText = o.price; document.getElementById('v_total').innerText = o.price;
-        document.getElementById('formSection').style.display = 'none';
-        document.getElementById('invoiceSection').style.display = 'block';
+        document.getElementById('formSection').style.display = 'none'; document.getElementById('invoiceSection').style.display = 'block';
     }
 
     db.ref('orders').on('value', s => {
-        const list = document.getElementById('listOrders'); list.innerHTML = '';
+        const list = document.getElementById('listOrders'); const arch = document.getElementById('listArchive');
+        list.innerHTML = ''; arch.innerHTML = '';
         const data = s.val(); if(data) Object.keys(data).forEach(k => {
-            list.innerHTML += `<div class="edit-row"><span><b>${data[k].customer}</b></span>
-                <button onclick="viewInvoiceAdmin('${k}')" style="background:blue; color:white; border:none; padding:8px; border-radius:8px;">Tax Invoice</button></div>`;
+            const o = data[k];
+            const html = `<div class="edit-row">
+                <span><b>#${o.serial}</b> - ${o.customer}</span>
+                <div>
+                    <button class="btn-small" style="background:blue; color:white;" onclick="viewInvoiceAdmin('${k}')">عرض</button>
+                    ${o.status === 'new' ? `<button class="btn-small" style="background:green; color:white;" onclick="archiveOrder('${k}')">تأكيد</button>` : ''}
+                    <button class="btn-small" style="background:red; color:white;" onclick="deleteOrder('${k}')">حذف</button>
+                </div>
+            </div>`;
+            if(o.status === 'new') list.innerHTML += html; else arch.innerHTML += html;
         });
     });
+
+    function archiveOrder(k) { if(confirm("هل تريد نقل هذه الفاتورة للأرشيف؟")) db.ref('orders/'+k).update({ status: 'archived' }); }
+    function deleteOrder(k) { if(confirm("سيتم حذف الفاتورة نهائياً! هل أنت متأكد؟")) db.ref('orders/'+k).remove(); }
 
     function viewInvoiceAdmin(k) {
         db.ref('orders/'+k).once('value', s => {
             const o = s.val(); document.getElementById('docType').innerText = "TAX INVOICE";
             document.getElementById('invAlert').style.display = "none";
-            renderInvoice(o); document.getElementById('modal').style.display='block';
+            document.getElementById('waFinalBtn').style.display = "none";
+            renderInvoice(o, true); document.getElementById('modal').style.display='block';
         });
     }
 
     function downloadInv() { html2canvas(document.querySelector("#invoiceBox")).then(c => { const l = document.createElement('a'); l.download='DSE-Invoice.png'; l.href=c.toDataURL(); l.click(); }); }
-    function sendWA() { window.open(`https://wa.me/${sets.wa}?text=تأكيد أوردر: ${activeP.name} (Code: ${activeP.code})`, '_blank'); }
+    function sendWA() { window.open(`https://wa.me/${sets.wa}?text=تأكيد أوردر رقم ${document.getElementById('v_serial').innerText}: ${activeP.name}`, '_blank'); }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    function checkAdmin() { if(prompt("Pass:")==="123") document.getElementById('adminPanel').style.display='block'; }
+    function checkAdmin() { if(prompt("كلمة المرور:")==="123") document.getElementById('adminPanel').style.display='block'; }
 </script>
 
 <footer style="text-align:center; padding:40px; opacity:0.1;">
