@@ -98,7 +98,7 @@
     </div>
 
     <div class="admin-box"><h3>🚨 الطلبات الجديدة</h3><div id="listOrders"></div></div>
-    <div class="admin-box"><h3>✅ الأرشيف</h3><div id="listArchive"></div></div>
+    <div class="admin-box"><h3>✅ الأرشفة (يمكنك الحذف من هنا)</h3><div id="listArchive"></div></div>
     <div class="admin-box"><h3>📦 إدارة المخزن</h3><div id="listProds"></div></div>
 </div>
 
@@ -167,7 +167,6 @@
     firebase.initializeApp(firebaseConfig); const db = firebase.database();
     let tempImg="", tempHeader="", tempBody="", activeP=null, currentOrder=null, sets={};
 
-    // دالة تنسيق التاريخ (يوم-شهر-سنة)
     function formatD(dStr) {
         const d = new Date(dStr);
         const day = String(d.getDate()).padStart(2, '0');
@@ -240,9 +239,17 @@
 
     db.ref('orders').on('value', s => {
         const l = document.getElementById('listOrders'); const a = document.getElementById('listArchive'); l.innerHTML = ''; a.innerHTML = ''; const d = s.val();
-        if(d) Object.keys(d).forEach(k => { const o = d[k]; const h = `<div class="edit-row"><span>#${o.serial} - ${o.customer}</span><div><button onclick="viewAdminInv('${k}')" style="background:blue; color:white; border:none; padding:5px; border-radius:5px;">عرض</button><button onclick="db.ref('orders/${k}').update({status:'archived'})" style="background:green; color:white; border:none; padding:5px; border-radius:5px; margin-right:5px;">أرشفة</button></div></div>`; if(o.status === 'new') l.innerHTML += h; else a.innerHTML += h; });
+        if(d) Object.keys(d).forEach(k => { 
+            const o = d[k]; 
+            if(o.status === 'new') {
+                l.innerHTML += `<div class="edit-row"><span>#${o.serial} - ${o.customer}</span><div><button onclick="viewAdminInv('${k}')" style="background:blue; color:white; border:none; padding:5px; border-radius:5px;">عرض</button><button onclick="db.ref('orders/${k}').update({status:'archived'})" style="background:green; color:white; border:none; padding:5px; border-radius:5px; margin-right:5px;">أرشفة</button></div></div>`;
+            } else {
+                a.innerHTML += `<div class="edit-row"><span>#${o.serial} - ${o.customer}</span><div><button onclick="viewAdminInv('${k}')" style="background:blue; color:white; border:none; padding:5px; border-radius:5px;">عرض</button><button onclick="deleteOrder('${k}')" style="background:red; color:white; border:none; padding:5px; border-radius:5px; margin-right:5px;">حذف نهائي</button></div></div>`;
+            }
+        });
     });
 
+    function deleteOrder(k) { if(confirm("هل أنت متأكد من حذف هذه الفاتورة نهائياً؟")) { db.ref('orders/'+k).remove(); } }
     function viewAdminInv(k) { db.ref('orders/'+k).once('value', s => { document.getElementById('adminTaxTool').style.display="block"; document.getElementById('waFinalBtn').style.display="none"; renderInvoice(s.val(), true); document.getElementById('modal').style.display='block'; }); }
     function openOrder(k) { db.ref('items/'+k).once('value', s => { activeP = s.val(); document.getElementById('targetN').innerText = activeP.name; document.getElementById('modal').style.display = 'block'; document.getElementById('formSection').style.display = 'block'; document.getElementById('invoiceSection').style.display = 'none'; }); }
     function downloadInv() { html2canvas(document.querySelector("#invoiceBox"), {scale:2}).then(c => { const l = document.createElement('a'); l.download=`DSE-${currentOrder.serial}.png`; l.href=c.toDataURL(); l.click(); }); }
