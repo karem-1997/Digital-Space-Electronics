@@ -167,6 +167,15 @@
     firebase.initializeApp(firebaseConfig); const db = firebase.database();
     let tempImg="", tempHeader="", tempBody="", activeP=null, currentOrder=null, sets={};
 
+    // دالة تنسيق التاريخ (يوم-شهر-سنة)
+    function formatD(dStr) {
+        const d = new Date(dStr);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
     db.ref('settings').on('value', s => { 
         sets = s.val() || { title: "Digital Space Electronics", wa: "971504509223", lastSerial: 1000 };
         document.getElementById('shopName').innerText = sets.title;
@@ -207,7 +216,7 @@
 
     function submitOrder() {
         const q = document.getElementById('cuQ').value || 1; const nS = (sets.lastSerial || 1000) + 1;
-        const o = { name: activeP.name, code: activeP.code, price: activeP.price, customer: document.getElementById('cuN').value, phone: document.getElementById('cuP').value, qty: q, serial: nS, date: new Date().toLocaleDateString(), status: 'new' };
+        const o = { name: activeP.name, code: activeP.code, price: activeP.price, customer: document.getElementById('cuN').value, phone: document.getElementById('cuP').value, qty: q, serial: nS, date: new Date().toISOString(), status: 'new' };
         db.ref('orders').push(o); db.ref('settings').update({ lastSerial: nS });
         document.getElementById('v_doc_title').innerText = "ORDER CONFIRMATION";
         document.getElementById('adminTaxTool').style.display = "none"; renderInvoice(o, false);
@@ -216,7 +225,7 @@
     function renderInvoice(o, isAdmin) {
         currentOrder = o; document.getElementById('v_serial').innerText = o.serial; document.getElementById('v_name').innerText = o.customer;
         document.getElementById('v_phone').innerText = o.phone;
-        document.getElementById('v_date').innerText = o.date; document.getElementById('v_item').innerText = o.name;
+        document.getElementById('v_date').innerText = formatD(o.date); document.getElementById('v_item').innerText = o.name;
         document.getElementById('v_code').innerText = o.code || 'N/A'; document.getElementById('v_qty').innerText = o.qty;
         document.getElementById('v_unit').innerText = o.price; document.getElementById('v_row_total').innerText = (o.qty * o.price);
         if(isAdmin) document.getElementById('v_doc_title').innerText = "TAX INVOICE";
