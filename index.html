@@ -75,13 +75,15 @@
     </div>
 
     <div class="admin-box">
-        <h3>🎨 تخصيص المظهر</h3>
+        <h3>🎨 تخصيص المظهر والإعدادات</h3>
         <input type="text" id="setT" class="inp" placeholder="اسم الموقع الأساسي">
         <label>صورة الغلاف (Header):</label><input type="file" class="inp" onchange="encodeCover('header')">
         <label>خلفية الموقع (Background):</label><input type="file" class="inp" onchange="encodeCover('body')">
         <input type="text" id="setW" class="inp" placeholder="رقم الواتساب">
         <input type="text" id="setF" class="inp" placeholder="فيسبوك">
         <input type="text" id="setI" class="inp" placeholder="انستجرام">
+        <label style="color:var(--orange); font-weight:bold;">كلمة مرور لوحة التحكم:</label>
+        <input type="text" id="setPass" class="inp" placeholder="كلمة المرور الجديدة">
         <button class="btn btn-blue" onclick="saveSettings()">حفظ كل التغييرات</button>
     </div>
 
@@ -98,7 +100,7 @@
     </div>
 
     <div class="admin-box"><h3>🚨 الطلبات الجديدة</h3><div id="listOrders"></div></div>
-    <div class="admin-box"><h3>✅ الأرشفة (يمكنك الحذف من هنا)</h3><div id="listArchive"></div></div>
+    <div class="admin-box"><h3>✅ الأرشيف (يمكنك الحذف من هنا)</h3><div id="listArchive"></div></div>
     <div class="admin-box"><h3>📦 إدارة المخزن</h3><div id="listProds"></div></div>
 </div>
 
@@ -176,19 +178,21 @@
     }
 
     db.ref('settings').on('value', s => { 
-        sets = s.val() || { title: "Digital Space Electronics", wa: "971504509223", lastSerial: 1000 };
+        sets = s.val() || { title: "Digital Space Electronics", wa: "971504509223", lastSerial: 1000, pass: "123" };
         document.getElementById('shopName').innerText = sets.title;
         document.getElementById('linkWA').href = "https://wa.me/" + sets.wa;
         if(sets.hB) document.getElementById('mainHeader').style.backgroundImage = `url('${sets.hB}')`;
         if(sets.bB) document.getElementById('mainBody').style.backgroundImage = `url('${sets.bB}')`;
-        document.getElementById('setT').value = sets.title; document.getElementById('setW').value = sets.wa;
+        document.getElementById('setT').value = sets.title; 
+        document.getElementById('setW').value = sets.wa;
+        document.getElementById('setPass').value = sets.pass;
     });
 
     function encodeCover(t) { const f = event.target.files[0]; const r = new FileReader(); r.onloadend = () => { if(t==='header') tempHeader=r.result; else tempBody=r.result; }; r.readAsDataURL(f); }
     function encodeImg() { const f = event.target.files[0]; const r = new FileReader(); r.onloadend = () => tempImg=r.result; r.readAsDataURL(f); }
 
     function saveSettings() {
-        let u = { title: document.getElementById('setT').value, wa: document.getElementById('setW').value, fb: document.getElementById('setF').value, ig: document.getElementById('setI').value };
+        let u = { title: document.getElementById('setT').value, wa: document.getElementById('setW').value, fb: document.getElementById('setF').value, ig: document.getElementById('setI').value, pass: document.getElementById('setPass').value };
         if(tempHeader) u.hB = tempHeader; if(tempBody) u.bB = tempBody;
         db.ref('settings').update(u).then(() => alert("تم تحديث البيانات"));
     }
@@ -255,7 +259,12 @@
     function downloadInv() { html2canvas(document.querySelector("#invoiceBox"), {scale:2}).then(c => { const l = document.createElement('a'); l.download=`DSE-${currentOrder.serial}.png`; l.href=c.toDataURL(); l.click(); }); }
     function sendWA() { window.open(`https://wa.me/${sets.wa}?text=طلب جديد رقم ${currentOrder.serial}: ${currentOrder.name}`, '_blank'); }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    function checkAdmin() { if(prompt("Pass:")==="123") document.getElementById('adminPanel').style.display='block'; }
+    
+    // تعديل دالة الدخول بالباسورد المتغير
+    function checkAdmin() { 
+        const pass = sets.pass || "123"; 
+        if(prompt("Pass:") === pass) document.getElementById('adminPanel').style.display='block'; 
+    }
 </script>
 
 <footer style="text-align:center; padding:40px; opacity:0.1;"><button onclick="checkAdmin()" style="background:none; border:none; color:white;">[ ADMIN ]</button></footer>
