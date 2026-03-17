@@ -42,14 +42,18 @@
         #invoiceBox { 
             background: white; color: black; padding: 25px; direction: ltr; font-family: 'Cairo', sans-serif; 
             width: 140mm; margin: auto; box-sizing: border-box; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            position: relative;
+            position: relative; overflow: hidden;
         }
-        .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
-        .inv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+        /* ستايل العلامة المائية واللوجو */
+        #v_watermark_img { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); width: 80%; opacity: 0.08; pointer-events: none; z-index: 0; display: none; }
+        #v_logo_img { max-height: 65px; max-width: 160px; display: none; margin-bottom: 5px; }
+
+        .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; position: relative; z-index: 1; }
+        .inv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; position: relative; z-index: 1; }
         .inv-table th { background: #f2f2f2; text-align: left; padding: 8px; border: 1px solid #ddd; }
         .inv-table td { padding: 8px; border: 1px solid #ddd; }
 
-        /* ستايل لوضع التعديل الحر */
         .edit-active [contenteditable="true"] { background: #fffde7 !important; outline: 1px dashed var(--orange) !important; }
         .edit-active [contenteditable="true"]:focus { background: #fff !important; outline: 2px solid var(--blue) !important; }
 
@@ -122,6 +126,13 @@
         </div>
 
         <div id="invoiceSection" style="display:none;">
+            <div style="display:flex; gap:5px; margin-bottom:10px;">
+                <button onclick="document.getElementById('upLogo').click()" style="flex:1; font-size:0.8rem; background:#333; color:white; border:none; padding:8px; border-radius:5px;">+ تغيير الشعار</button>
+                <button onclick="document.getElementById('upWater').click()" style="flex:1; font-size:0.8rem; background:#333; color:white; border:none; padding:8px; border-radius:5px;">+ علامة مائية</button>
+                <input type="file" id="upLogo" hidden onchange="uploadFixedImg(event, 'compLogo')">
+                <input type="file" id="upWater" hidden onchange="uploadFixedImg(event, 'compWater')">
+            </div>
+
             <button class="btn btn-edit-mode" id="toggleEditBtn" onclick="toggleFreeEdit()">
                 <i class="fas fa-edit"></i> تفعيل وضع التحرير (عدل أي حرف أو رقم)
             </button>
@@ -131,21 +142,24 @@
             </div>
             
             <div id="invoiceBox">
+                <img id="v_watermark_img" src="">
+
                 <div class="inv-header">
                     <div>
-                        <h2 style="margin:0; font-size:1.1rem; color:var(--orange);" id="v_doc_title" contenteditable="true">ORDER CONFIRMATION</h2>
-                        <small><b id="v_comp_name" contenteditable="true">Digital Space Electronics L.L.C</b></small><br>
-                        <small id="v_comp_trn" contenteditable="true">TRN: 1000177244400003</small><br>
-                        <small id="v_comp_addr" contenteditable="true">Dubai, United Arab Emirates</small>
+                        <img id="v_logo_img" src="">
+                        <h2 style="margin:0; font-size:1.1rem; color:var(--orange);" id="v_doc_title" contenteditable="true" onblur="saveFixedCompInfo()">ORDER CONFIRMATION</h2>
+                        <small><b id="v_comp_name" contenteditable="true" onblur="saveFixedCompInfo()">Digital Space Electronics L.L.C</b></small><br>
+                        <small id="v_comp_trn" contenteditable="true" onblur="saveFixedCompInfo()">TRN: 1000177244400003</small><br>
+                        <small id="v_comp_addr" contenteditable="true" onblur="saveFixedCompInfo()">Dubai, United Arab Emirates</small>
                     </div>
                     <div style="text-align:right">
-                        <h1 style="margin:0; font-size:1.8rem;" id="v_logo_text" contenteditable="true">DSE</h1>
+                        <h1 style="margin:0; font-size:1.8rem;" id="v_logo_text" contenteditable="true" onblur="saveFixedCompInfo()">DSE</h1>
                         <small><span contenteditable="true">Inv #:</span> <span id="v_serial" contenteditable="true"></span></small><br>
                         <small id="v_date" contenteditable="true"></small>
                     </div>
                 </div>
                 
-                <div style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:12px; line-height:1.6;">
+                <div style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:12px; line-height:1.6; position:relative; z-index:1;">
                     <small style="color:#777; font-weight:bold; font-size:0.75rem;" contenteditable="true">CLIENT INFORMATION:</small><br>
                     <div style="font-size:1rem; font-weight:800; text-transform:uppercase;"><span contenteditable="true">Name:</span> <span id="v_name" contenteditable="true"></span></div>
                     <div style="font-size:1rem; font-weight:800;"><span contenteditable="true">Phone:</span> <span id="v_phone" contenteditable="true"></span></div>
@@ -172,7 +186,7 @@
                     </tbody>
                 </table>
 
-                <div style="text-align:right; margin-top:15px;">
+                <div style="text-align:right; margin-top:15px; position:relative; z-index:1;">
                     <div id="taxLine" style="display:none; font-size:0.9rem;">
                         <span contenteditable="true">VAT (5%):</span> <span id="v_tax_val" contenteditable="true"></span> <span contenteditable="true">AED</span>
                     </div>
@@ -180,7 +194,7 @@
                         <span contenteditable="true">GRAND TOTAL:</span> <span id="v_grand" contenteditable="true"></span> <span contenteditable="true">AED</span>
                     </div>
                 </div>
-                <div id="v_footer_note" style="margin-top:20px; text-align:center; font-size:0.7rem; color:#888; border-top:1px dashed #ccc; padding-top:10px;" contenteditable="true">
+                <div id="v_footer_note" style="margin-top:20px; text-align:center; font-size:0.7rem; color:#888; border-top:1px dashed #ccc; padding-top:10px; position:relative; z-index:1;" contenteditable="true" onblur="saveFixedCompInfo()">
                     Thank you for choosing Digital Space Electronics
                 </div>
             </div>
@@ -211,7 +225,47 @@
         document.getElementById('setT').value = sets.title; 
         document.getElementById('setW').value = sets.wa;
         document.getElementById('setPass').value = sets.pass;
+
+        // تعبئة بيانات الشركة الثابتة في الفاتورة من السيرفر
+        if(sets.compName) document.getElementById('v_comp_name').innerText = sets.compName;
+        if(sets.compTrn) document.getElementById('v_comp_trn').innerText = sets.compTrn;
+        if(sets.compAddr) document.getElementById('v_comp_addr').innerText = sets.compAddr;
+        if(sets.docTitle) document.getElementById('v_doc_title').innerText = sets.docTitle;
+        if(sets.logoText) document.getElementById('v_logo_text').innerText = sets.logoText;
+        if(sets.footerNote) document.getElementById('v_footer_note').innerText = sets.footerNote;
+
+        // عرض الصور الثابتة المحفوظة
+        if(sets.compLogo) {
+            const l = document.getElementById('v_logo_img'); l.src = sets.compLogo; l.style.display = 'block';
+            document.getElementById('v_logo_text').style.display = 'none';
+        }
+        if(sets.compWater) {
+            const w = document.getElementById('v_watermark_img'); w.src = sets.compWater; w.style.display = 'block';
+        }
     });
+
+    // وظيفة حفظ بيانات شركتك بشكل دائم
+    function saveFixedCompInfo() {
+        db.ref('settings').update({
+            compName: document.getElementById('v_comp_name').innerText,
+            compTrn: document.getElementById('v_comp_trn').innerText,
+            compAddr: document.getElementById('v_comp_addr').innerText,
+            docTitle: document.getElementById('v_doc_title').innerText,
+            logoText: document.getElementById('v_logo_text').innerText,
+            footerNote: document.getElementById('v_footer_note').innerText
+        });
+    }
+
+    // وظيفة حفظ صور الشعار والعلامة المائية للأبد
+    function uploadFixedImg(e, type) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            let update = {}; update[type] = reader.result;
+            db.ref('settings').update(update).then(() => alert("تم حفظ الصورة بنجاح"));
+        };
+        reader.readAsDataURL(file);
+    }
 
     function encodeCover(t) { const f = event.target.files[0]; const r = new FileReader(); r.onloadend = () => { if(t==='header') tempHeader=r.result; else tempBody=r.result; }; r.readAsDataURL(f); }
     function encodeImg() { const f = event.target.files[0]; const r = new FileReader(); r.onloadend = () => tempImg=r.result; r.readAsDataURL(f); }
@@ -249,18 +303,11 @@
         renderInvoice(o, false);
     }
 
-    // --- نظام الحسابات المتقدم والمرن ---
     function calculateFinals() {
-        // سحب القيم من الخانات القابلة للتعديل مباشرة
         const qtyTxt = document.getElementById('v_qty').innerText.replace(/[^0-9.]/g, '') || 0;
         const unitTxt = document.getElementById('v_unit').innerText.replace(/[^0-9.]/g, '') || 0;
-        
-        const q = parseFloat(qtyTxt);
-        const u = parseFloat(unitTxt);
-        const sub = q * u;
-        
+        const q = parseFloat(qtyTxt); const u = parseFloat(unitTxt); const sub = q * u;
         document.getElementById('v_row_total').innerText = sub.toFixed(2);
-        
         const isTax = document.getElementById('applyTax').checked;
         if(isTax) {
             const tax = sub * 0.05;
@@ -275,8 +322,7 @@
 
     function toggleFreeEdit() {
         isEditMode = !isEditMode;
-        const box = document.getElementById('invoiceBox');
-        const btn = document.getElementById('toggleEditBtn');
+        const box = document.getElementById('invoiceBox'); const btn = document.getElementById('toggleEditBtn');
         if(isEditMode) {
             box.classList.add('edit-active');
             btn.innerHTML = '<i class="fas fa-check"></i> قفل الخانات (جاهز للتحميل)';
@@ -285,12 +331,12 @@
             box.classList.remove('edit-active');
             btn.innerHTML = '<i class="fas fa-edit"></i> تفعيل وضع التحرير (عدل أي حرف أو رقم)';
             btn.style.background = '#4caf50';
+            saveFixedCompInfo(); // حفظ تلقائي عند القفل
         }
     }
 
     function renderInvoice(o, isAdmin) {
-        currentOrder = o;
-        isEditMode = false;
+        currentOrder = o; isEditMode = false;
         document.getElementById('invoiceBox').classList.remove('edit-active');
         document.getElementById('v_serial').innerText = o.serial;
         document.getElementById('v_name').innerText = o.customer;
@@ -300,10 +346,8 @@
         document.getElementById('v_code').innerText = o.code || 'N/A';
         document.getElementById('v_qty').innerText = o.qty;
         document.getElementById('v_unit').innerText = o.price;
-        
         if(isAdmin) document.getElementById('v_doc_title').innerText = "TAX INVOICE";
         else document.getElementById('v_doc_title').innerText = "ORDER CONFIRMATION";
-
         calculateFinals();
         document.getElementById('formSection').style.display = 'none'; 
         document.getElementById('invoiceSection').style.display = 'block';
@@ -323,8 +367,8 @@
 
     function deleteOrder(k) { if(confirm("هل أنت متأكد من حذف هذه الفاتورة نهائياً؟")) { db.ref('orders/'+k).remove(); } }
     function viewAdminInv(k) { db.ref('orders/'+k).once('value', s => { document.getElementById('adminTaxTool').style.display="block"; document.getElementById('waFinalBtn').style.display="none"; renderInvoice(s.val(), true); document.getElementById('modal').style.display='block'; }); }
-    function openOrder(k) { db.ref('items/'+k).once('value', s => { activeP = s.val(); document.getElementById('targetN').innerText = activeP.name; document.getElementById('modal').style.display = 'block'; document.getElementById('formSection').style.display = 'block'; document.getElementById('invoiceSection').style.display = 'none'; }); }
-    function downloadInv() { html2canvas(document.querySelector("#invoiceBox"), {scale:2}).then(c => { const l = document.createElement('a'); l.download=`DSE-${currentOrder.serial}.png`; l.href=c.toDataURL(); l.click(); }); }
+    function openOrder(k) { db.ref('items/'+k).once('value', s => { activeP = s.val(); document.getElementById('targetN').innerText = activeP.name; document.getElementById('targetD').innerText = activeP.desc || ''; document.getElementById('modal').style.display = 'block'; document.getElementById('formSection').style.display = 'block'; document.getElementById('invoiceSection').style.display = 'none'; }); }
+    function downloadInv() { html2canvas(document.querySelector("#invoiceBox"), {scale:2, useCORS: true}).then(c => { const l = document.createElement('a'); l.download=`DSE-${currentOrder.serial}.png`; l.href=c.toDataURL(); l.click(); }); }
     function sendWA() { window.open(`https://wa.me/${sets.wa}?text=طلب جديد رقم ${currentOrder.serial}: ${currentOrder.name}`, '_blank'); }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
     function checkAdmin() { if(prompt("Pass:") === (sets.pass || "123")) document.getElementById('adminPanel').style.display='block'; }
