@@ -42,15 +42,21 @@
         #invoiceBox { 
             background: white; color: black; padding: 25px; direction: ltr; font-family: 'Cairo', sans-serif; 
             width: 140mm; margin: auto; box-sizing: border-box; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
         }
         .inv-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
         .inv-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         .inv-table th { background: #f2f2f2; text-align: left; padding: 8px; border: 1px solid #ddd; }
         .inv-table td { padding: 8px; border: 1px solid #ddd; }
 
+        /* ستايل لوضع التعديل الحر */
+        .edit-active [contenteditable="true"] { background: #fffde7 !important; outline: 1px dashed var(--orange) !important; }
+        .edit-active [contenteditable="true"]:focus { background: #fff !important; outline: 2px solid var(--blue) !important; }
+
         .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 8px; font-family: 'Cairo'; }
         .btn-orange { background: var(--orange); color: white; }
         .btn-blue { background: var(--blue); color: white; }
+        .btn-edit-mode { background: #4caf50; color: white; margin-bottom: 10px; }
         .btn-order { background: var(--blue); color: white; margin: 10px auto; width: 90%; }
         
         @media print { body * { visibility: hidden; } #invoiceBox, #invoiceBox * { visibility: visible; } #invoiceBox { position: absolute; left: 0; top: 0; width: 100%; } }
@@ -116,43 +122,65 @@
         </div>
 
         <div id="invoiceSection" style="display:none;">
+            <button class="btn btn-edit-mode" id="toggleEditBtn" onclick="toggleFreeEdit()">
+                <i class="fas fa-edit"></i> تفعيل وضع التحرير (عدل أي حرف أو رقم)
+            </button>
+
             <div id="adminTaxTool" style="display:none; background:#222; padding:15px; border-radius:10px; margin-bottom:10px;">
-                <label style="color:white; font-weight:bold;"><input type="checkbox" id="applyTax" onchange="updateGrandTotal()"> تفعيل الضريبة 5% (Tax Invoice Mode)</label>
+                <label style="color:white; font-weight:bold;"><input type="checkbox" id="applyTax" onchange="calculateFinals()"> تفعيل الضريبة 5%</label>
             </div>
             
             <div id="invoiceBox">
                 <div class="inv-header">
                     <div>
-                        <h2 style="margin:0; font-size:1.1rem; color:var(--orange);" id="v_doc_title">ORDER CONFIRMATION</h2>
-                        <small><b>Digital Space Electronics L.L.C</b></small><br>
-                        <small>TRN: 1000177244400003</small><br>
-                        <small>Dubai, United Arab Emirates</small>
+                        <h2 style="margin:0; font-size:1.1rem; color:var(--orange);" id="v_doc_title" contenteditable="true">ORDER CONFIRMATION</h2>
+                        <small><b id="v_comp_name" contenteditable="true">Digital Space Electronics L.L.C</b></small><br>
+                        <small id="v_comp_trn" contenteditable="true">TRN: 1000177244400003</small><br>
+                        <small id="v_comp_addr" contenteditable="true">Dubai, United Arab Emirates</small>
                     </div>
                     <div style="text-align:right">
-                        <h1 style="margin:0; font-size:1.8rem;">DSE</h1>
-                        <small>Inv #: <span id="v_serial"></span></small><br>
-                        <small id="v_date"></small>
+                        <h1 style="margin:0; font-size:1.8rem;" id="v_logo_text" contenteditable="true">DSE</h1>
+                        <small><span contenteditable="true">Inv #:</span> <span id="v_serial" contenteditable="true"></span></small><br>
+                        <small id="v_date" contenteditable="true"></small>
                     </div>
                 </div>
                 
                 <div style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:12px; line-height:1.6;">
-                    <small style="color:#777; font-weight:bold; font-size:0.75rem;">CLIENT INFORMATION:</small><br>
-                    <div style="font-size:1rem; font-weight:800; text-transform:uppercase;">Name: <span id="v_name"></span></div>
-                    <div style="font-size:1rem; font-weight:800;">Phone: <span id="v_phone"></span></div>
+                    <small style="color:#777; font-weight:bold; font-size:0.75rem;" contenteditable="true">CLIENT INFORMATION:</small><br>
+                    <div style="font-size:1rem; font-weight:800; text-transform:uppercase;"><span contenteditable="true">Name:</span> <span id="v_name" contenteditable="true"></span></div>
+                    <div style="font-size:1rem; font-weight:800;"><span contenteditable="true">Phone:</span> <span id="v_phone" contenteditable="true"></span></div>
                 </div>
 
                 <table class="inv-table">
-                    <thead><tr><th>Product Description</th><th>Code</th><th>Qty</th><th>Price</th><th style="text-align:right;">Total</th></tr></thead>
-                    <tbody><tr><td><span id="v_item"></span></td><td id="v_code"></td><td id="v_qty"></td><td id="v_unit"></td><td id="v_row_total" style="text-align:right;"></td></tr></tbody>
+                    <thead>
+                        <tr>
+                            <th contenteditable="true">Description</th>
+                            <th contenteditable="true">Code</th>
+                            <th contenteditable="true">Qty</th>
+                            <th contenteditable="true">Price</th>
+                            <th style="text-align:right;" contenteditable="true">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span id="v_item" contenteditable="true"></span></td>
+                            <td><span id="v_code" contenteditable="true"></span></td>
+                            <td><span id="v_qty" contenteditable="true" oninput="calculateFinals()"></span></td>
+                            <td><span id="v_unit" contenteditable="true" oninput="calculateFinals()"></span></td>
+                            <td id="v_row_total" style="text-align:right;" contenteditable="true"></td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div style="text-align:right; margin-top:15px;">
-                    <div id="taxLine" style="display:none; font-size:0.9rem;">VAT (5%): <span id="v_tax_val"></span> AED</div>
+                    <div id="taxLine" style="display:none; font-size:0.9rem;">
+                        <span contenteditable="true">VAT (5%):</span> <span id="v_tax_val" contenteditable="true"></span> <span contenteditable="true">AED</span>
+                    </div>
                     <div style="font-size:1.1rem; font-weight:bold; border-top:2px solid #000; margin-top:5px; padding-top:5px;">
-                        GRAND TOTAL: <span id="v_grand"></span> AED
+                        <span contenteditable="true">GRAND TOTAL:</span> <span id="v_grand" contenteditable="true"></span> <span contenteditable="true">AED</span>
                     </div>
                 </div>
-                <div style="margin-top:20px; text-align:center; font-size:0.7rem; color:#888; border-top:1px dashed #ccc; padding-top:10px;">
+                <div id="v_footer_note" style="margin-top:20px; text-align:center; font-size:0.7rem; color:#888; border-top:1px dashed #ccc; padding-top:10px;" contenteditable="true">
                     Thank you for choosing Digital Space Electronics
                 </div>
             </div>
@@ -167,14 +195,11 @@
 <script>
     const firebaseConfig = { apiKey: "AIzaSyDdqJApEM9mym9JdvwOS_Kl0mOwAt4o1qs", authDomain: "digital-space-electronics.firebaseapp.com", projectId: "digital-space-electronics", databaseURL: "https://digital-space-electronics-default-rtdb.firebaseio.com" };
     firebase.initializeApp(firebaseConfig); const db = firebase.database();
-    let tempImg="", tempHeader="", tempBody="", activeP=null, currentOrder=null, sets={};
+    let tempImg="", tempHeader="", tempBody="", activeP=null, currentOrder=null, sets={}, isEditMode = false;
 
     function formatD(dStr) {
         const d = new Date(dStr);
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        return `${day}-${month}-${year}`;
+        return `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
     }
 
     db.ref('settings').on('value', s => { 
@@ -221,24 +246,67 @@
         const q = document.getElementById('cuQ').value || 1; const nS = (sets.lastSerial || 1000) + 1;
         const o = { name: activeP.name, code: activeP.code, price: activeP.price, customer: document.getElementById('cuN').value, phone: document.getElementById('cuP').value, qty: q, serial: nS, date: new Date().toISOString(), status: 'new' };
         db.ref('orders').push(o); db.ref('settings').update({ lastSerial: nS });
-        document.getElementById('v_doc_title').innerText = "ORDER CONFIRMATION";
-        document.getElementById('adminTaxTool').style.display = "none"; renderInvoice(o, false);
+        renderInvoice(o, false);
+    }
+
+    // --- نظام الحسابات المتقدم والمرن ---
+    function calculateFinals() {
+        // سحب القيم من الخانات القابلة للتعديل مباشرة
+        const qtyTxt = document.getElementById('v_qty').innerText.replace(/[^0-9.]/g, '') || 0;
+        const unitTxt = document.getElementById('v_unit').innerText.replace(/[^0-9.]/g, '') || 0;
+        
+        const q = parseFloat(qtyTxt);
+        const u = parseFloat(unitTxt);
+        const sub = q * u;
+        
+        document.getElementById('v_row_total').innerText = sub.toFixed(2);
+        
+        const isTax = document.getElementById('applyTax').checked;
+        if(isTax) {
+            const tax = sub * 0.05;
+            document.getElementById('taxLine').style.display = 'block';
+            document.getElementById('v_tax_val').innerText = tax.toFixed(2);
+            document.getElementById('v_grand').innerText = (sub + tax).toFixed(2);
+        } else {
+            document.getElementById('taxLine').style.display = 'none';
+            document.getElementById('v_grand').innerText = sub.toFixed(2);
+        }
+    }
+
+    function toggleFreeEdit() {
+        isEditMode = !isEditMode;
+        const box = document.getElementById('invoiceBox');
+        const btn = document.getElementById('toggleEditBtn');
+        if(isEditMode) {
+            box.classList.add('edit-active');
+            btn.innerHTML = '<i class="fas fa-check"></i> قفل الخانات (جاهز للتحميل)';
+            btn.style.background = '#ff8c00';
+        } else {
+            box.classList.remove('edit-active');
+            btn.innerHTML = '<i class="fas fa-edit"></i> تفعيل وضع التحرير (عدل أي حرف أو رقم)';
+            btn.style.background = '#4caf50';
+        }
     }
 
     function renderInvoice(o, isAdmin) {
-        currentOrder = o; document.getElementById('v_serial').innerText = o.serial; document.getElementById('v_name').innerText = o.customer;
+        currentOrder = o;
+        isEditMode = false;
+        document.getElementById('invoiceBox').classList.remove('edit-active');
+        document.getElementById('v_serial').innerText = o.serial;
+        document.getElementById('v_name').innerText = o.customer;
         document.getElementById('v_phone').innerText = o.phone;
-        document.getElementById('v_date').innerText = formatD(o.date); document.getElementById('v_item').innerText = o.name;
-        document.getElementById('v_code').innerText = o.code || 'N/A'; document.getElementById('v_qty').innerText = o.qty;
-        document.getElementById('v_unit').innerText = o.price; document.getElementById('v_row_total').innerText = (o.qty * o.price);
+        document.getElementById('v_date').innerText = formatD(o.date);
+        document.getElementById('v_item').innerText = o.name;
+        document.getElementById('v_code').innerText = o.code || 'N/A';
+        document.getElementById('v_qty').innerText = o.qty;
+        document.getElementById('v_unit').innerText = o.price;
+        
         if(isAdmin) document.getElementById('v_doc_title').innerText = "TAX INVOICE";
-        updateGrandTotal(); document.getElementById('formSection').style.display = 'none'; document.getElementById('invoiceSection').style.display = 'block';
-    }
+        else document.getElementById('v_doc_title').innerText = "ORDER CONFIRMATION";
 
-    function updateGrandTotal() {
-        const sub = currentOrder.qty * currentOrder.price; const tax = document.getElementById('applyTax').checked;
-        if(tax) { const tV = sub * 0.05; document.getElementById('taxLine').style.display="block"; document.getElementById('v_tax_val').innerText=tV.toFixed(2); document.getElementById('v_grand').innerText=(sub+tV).toFixed(2); }
-        else { document.getElementById('taxLine').style.display="none"; document.getElementById('v_grand').innerText=sub; }
+        calculateFinals();
+        document.getElementById('formSection').style.display = 'none'; 
+        document.getElementById('invoiceSection').style.display = 'block';
     }
 
     db.ref('orders').on('value', s => {
@@ -259,12 +327,7 @@
     function downloadInv() { html2canvas(document.querySelector("#invoiceBox"), {scale:2}).then(c => { const l = document.createElement('a'); l.download=`DSE-${currentOrder.serial}.png`; l.href=c.toDataURL(); l.click(); }); }
     function sendWA() { window.open(`https://wa.me/${sets.wa}?text=طلب جديد رقم ${currentOrder.serial}: ${currentOrder.name}`, '_blank'); }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    
-    // تعديل دالة الدخول بالباسورد المتغير
-    function checkAdmin() { 
-        const pass = sets.pass || "123"; 
-        if(prompt("Pass:") === pass) document.getElementById('adminPanel').style.display='block'; 
-    }
+    function checkAdmin() { if(prompt("Pass:") === (sets.pass || "123")) document.getElementById('adminPanel').style.display='block'; }
 </script>
 
 <footer style="text-align:center; padding:40px; opacity:0.1;"><button onclick="checkAdmin()" style="background:none; border:none; color:white;">[ ADMIN ]</button></footer>
